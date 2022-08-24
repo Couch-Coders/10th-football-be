@@ -2,6 +2,7 @@ package couch.football.domain.stadium;
 
 import couch.football.domain.match.Match;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -20,35 +21,34 @@ public class Stadium {
     @Column(name = "stadium_id")
     private Long id;
 
-    @OneToMany(mappedBy = "matches", fetch = FetchType.LAZY)
-    private List<Match> matches = new ArrayList<>();
-
-    @OneToMany(mappedBy = "files", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "stadium")
     private List<File> files = new ArrayList<>();
 
-    @OneToMany(mappedBy = "likes", fetch = FetchType.LAZY)
-    private List<Like> likes = new ArrayList<>();
-
-    @Column(nullable = false)
     private String name;
 
     @Lob
-    @Column(nullable = false)
     private String content;
 
-    @Column(nullable = true)
     private boolean parking;
 
-    @Column(nullable = true)
     private boolean rental;
 
-    @Column(nullable = false)
     private String address;
 
-    @Column(name = "like_count", nullable = true)
     private Long likeCount;
 
-    @Column(name = "create_at", nullable = false)
     private LocalDateTime createAt;
 
+    @Builder
+
+    public Stadium(List<File> files, String name, String content, boolean parking, boolean rental, String address, Long likeCount) {
+        this.files = files;
+        this.name = name;
+        this.content = content;
+        this.parking = parking;
+        this.rental = rental;
+        this.address = address;
+        this.likeCount = likeCount;
+        this.createAt = LocalDateTime.now();
+    }
 }

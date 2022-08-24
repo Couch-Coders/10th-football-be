@@ -1,6 +1,7 @@
 package couch.football.domain.match;
 
 import couch.football.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -24,7 +25,7 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "uid")
     private Member member;
 
     @ManyToOne(fetch = LAZY)
@@ -36,4 +37,11 @@ public class Review {
 
     private LocalDateTime createAt;
 
+    @Builder
+    public Review(Member member, Match match, String content) {
+        this.member = member;
+        this.match = match;
+        this.content = content;
+        this.createAt = LocalDateTime.now();
+    }
 }

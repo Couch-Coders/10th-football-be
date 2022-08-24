@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "likes")
 public class Like {
 
@@ -18,7 +18,7 @@ public class Like {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "uid", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)

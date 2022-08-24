@@ -1,6 +1,7 @@
 package couch.football.domain.match;
 
 import couch.football.domain.stadium.Stadium;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -51,4 +52,15 @@ public class Match {
 
     private LocalDateTime createAt;
 
+    @Builder
+    public Match(Stadium stadium, int matchNum, int applicantNum, MatchStatus status, MatchGender gender, String content, LocalDateTime startAt) {
+        this.stadium = stadium;
+        this.matchNum = matchNum;
+        this.applicantNum = applicantNum;
+        this.status = status;
+        this.gender = gender;
+        this.content = content;
+        this.startAt = startAt;
+        this.createAt = LocalDateTime.now();
+    }
 }

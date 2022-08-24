@@ -18,9 +18,8 @@ public class File {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stadium_id", nullable = false)
+    @JoinColumn(name = "stadium_id")
     private Stadium stadium;
 
-    @Column(name = "image_url" ,nullable = false)
     private String imageUrl;
 }
