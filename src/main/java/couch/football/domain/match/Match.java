@@ -1,5 +1,6 @@
 package couch.football.domain.match;
 
+import couch.football.domain.stadium.Stadium;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -7,8 +8,12 @@ import lombok.ToString;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -16,15 +21,21 @@ import static javax.persistence.EnumType.STRING;
 @NoArgsConstructor
 @Table(name = "matches")
 public class Match {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "match_id")
     private Long id;
 
-    //경기 인원
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "stadium_id")
+    private Stadium stadium;
+
+    @OneToMany(mappedBy = "match")
+    private List<Review> reviews = new ArrayList<>();
+
     private int matchNum;
 
-    //현재 신청자 수
     private int applicantNum;
 
     @Enumerated(STRING)
@@ -36,7 +47,6 @@ public class Match {
     @Lob
     private String content;
 
-    //경기 시작 시간
     private LocalDateTime startAt;
 
     private LocalDateTime createAt;
