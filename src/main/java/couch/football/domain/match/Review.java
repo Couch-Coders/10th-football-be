@@ -1,4 +1,4 @@
-package couch.football.domain;
+package couch.football.domain.match;
 
-public class MatchReview {
+public class Review {
 }

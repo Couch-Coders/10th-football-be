@@ -1,2 +1,4 @@
-package couch.football.domain;public class Subscription {
+package couch.football.domain.match;
+
+public class Subscription {
 }

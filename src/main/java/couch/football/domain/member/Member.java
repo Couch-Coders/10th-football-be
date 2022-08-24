@@ -1,4 +1,4 @@
-package couch.football.domain;
+package couch.football.domain.member;
 
 public class Member {
 }
