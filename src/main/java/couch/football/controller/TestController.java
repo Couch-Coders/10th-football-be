@@ -3,6 +3,7 @@ package couch.football.controller;
 import couch.football.domain.match.Match;
 import couch.football.repository.match.MatchRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -13,16 +14,18 @@ public class TestController {
     private final MatchRepository matchRepository;
 
     @PostMapping("/matches")
-    public String add(@RequestBody TestDTO request) {
+    public Match add(@RequestBody TestDTO request) {
         Match match = Match.builder()
+                .gender(null)
+                .stadium(null)
+                .startAt(null)
+                .status(null)
                 .matchNum(request.getMatchNum())
                 .applicantNum(request.getApplicantNum())
                 .content(request.getContent())
                 .build();
 
-        matchRepository.save(match);
-
-        return "OK";
+        return matchRepository.save(match);
     }
 
     @GetMapping("/matches/{matchId}")
@@ -36,5 +39,10 @@ public class TestController {
                 .applicantNum(match.getApplicantNum())
                 .content(match.getContent())
                 .build();
+    }
+
+    @PostMapping("/test")
+    public TestDTO test(@RequestBody TestDTO testDTO) {
+        return testDTO;
     }
 }
