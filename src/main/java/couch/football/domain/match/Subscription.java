@@ -1,6 +1,7 @@
 package couch.football.domain.match;
 
 import couch.football.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -30,4 +31,9 @@ public class Subscription {
     @JoinColumn(name = "match_id")
     private Match match;
 
+    @Builder
+    public Subscription(Member member, Match match) {
+        this.member = member;
+        this.match = match;
+    }
 }
