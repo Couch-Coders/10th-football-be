@@ -42,23 +42,15 @@ public class ApplicationService {
                 .build();
         applicationRepository.save(application);
 
-        //남은 자리수
-        int applicantNum = match.getApplicantNum() + 1;
-        int rest = match.getMatchNum() - applicantNum;
-
         //신청자 수 변경
-        MatchEditor.MatchEditorBuilder editorBuilder = match.toEditor();
-        MatchEditor matchEditor = editorBuilder.applicantNum(applicantNum).build();
+        match.increaseApplicantNum();
 
         //경기 상태 변경
-        if (rest <= 0) {
-            matchEditor = editorBuilder.status(MatchStatus.CLOSE).build();
-        }
-        match.edit(matchEditor);
+        match.updateStatus();
 
         return ApplicationResponse.builder()
                 .id(matchId)
-                .rest(rest)
+                .rest(match.getRest()) //남은 자리 수
                 .status(match.getStatus().toString())
                 .application(application)
                 .build();
@@ -70,29 +62,23 @@ public class ApplicationService {
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));
 
+        //신청여부 조회
         List<Application> applications = applicationRepository.findAllByUidAndMatchId(member.getUid(), matchId);
 
+        //신청 취소
         if (!applications.isEmpty()) {
             applicationRepository.deleteAll(applications);
         }
 
-        //신청자수
-        int applicantNum = match.getApplicantNum() - 1;
-        int rest = match.getMatchNum() - applicantNum;
-
         //신청자 수 변경
-        MatchEditor.MatchEditorBuilder editorBuilder = match.toEditor();
-        MatchEditor matchEditor = editorBuilder.applicantNum(applicantNum).build();
+        match.decreaseApplicantNum();
 
         //경기 상태 변경
-        if (rest > 0) {
-            matchEditor = editorBuilder.status(MatchStatus.OPEN).build();
-        }
-        match.edit(matchEditor);
+        match.updateStatus();
 
         return ApplicationResponse.builder()
                 .id(matchId)
-                .rest(rest)
+                .rest(match.getRest()) //남은 자리 수
                 .status(match.getStatus().toString())
                 .build();
     }

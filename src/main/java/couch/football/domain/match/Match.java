@@ -51,7 +51,8 @@ public class Match extends BaseTimeEntity {
     private LocalDateTime startAt;
 
     @Builder
-    public Match(Stadium stadium, Integer matchNum, Integer applicantNum, MatchStatus status, MatchGender gender, String content, LocalDateTime startAt) {
+    public Match(Stadium stadium, Integer matchNum, Integer applicantNum,
+                 MatchStatus status, MatchGender gender, String content, LocalDateTime startAt) {
         this.stadium = stadium;
         this.matchNum = matchNum;
         this.applicantNum = applicantNum;
@@ -80,5 +81,25 @@ public class Match extends BaseTimeEntity {
         gender = matchEditor.getGender();
         status = matchEditor.getStatus();
         startAt = matchEditor.getStartAt();
+    }
+
+    public void increaseApplicantNum() {
+        this.applicantNum++;
+    }
+
+    public void decreaseApplicantNum() {
+        this.applicantNum--;
+    }
+
+    public int getRest() {
+        return this.matchNum - this.applicantNum;
+    }
+
+    public void updateStatus() {
+        if (getRest() <= 0) {
+            this.status = MatchStatus.CLOSE;
+        } else if (getRest() > 0) {
+            this.status = MatchStatus.OPEN;
+        }
     }
 }
