@@ -59,7 +59,7 @@ class ApplicationServiceTest {
 
         //when
         ApplicationResponse response = applicationService.applyMatch(match.getId(), member); //경기 신청
-        MatchResponse findMatch = matchService.getMatch(match.getId()); //경기 상세 조회
+        MatchResponse findMatch = matchService.get(match.getId()); //경기 상세 조회
 
         //then
         assertEquals(1L, applicationRepository.count()); //신청 결과 확인
@@ -96,7 +96,7 @@ class ApplicationServiceTest {
 
         //when
         applicationService.applyMatch(match.getId(), member1); //경기 신청
-        MatchResponse findMatch = matchService.getMatch(match.getId()); //경기 상세 조회
+        MatchResponse findMatch = matchService.get(match.getId()); //경기 상세 조회
 
         //then
         assertEquals("CLOSE", findMatch.getStatus()); //member1이 신청하여 경기 상태가 마감으로 변경
@@ -117,7 +117,7 @@ class ApplicationServiceTest {
 
         //when
         ApplicationResponse cancelResponse = applicationService.cancelMatch(match.getId(), member);// 신청 취소
-        MatchResponse findMatch = matchService.getMatch(match.getId()); //경기 상세 조회
+        MatchResponse findMatch = matchService.get(match.getId()); //경기 상세 조회
 
         //then
         assertEquals(0, applyResponse.getRest()); //신청 시 남은 자리수
