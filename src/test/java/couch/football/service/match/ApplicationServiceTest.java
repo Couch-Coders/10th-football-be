@@ -190,8 +190,6 @@ class ApplicationServiceTest {
         Match match = Match.builder()
                 .stadium(stadium)
                 .matchNum(matchNum)
-                .applicantNum(0)
-                .status(MatchStatus.OPEN)
                 .gender(MatchGender.valueOf(gender.toUpperCase()))
                 .content(content)
                 .startAt(null)
