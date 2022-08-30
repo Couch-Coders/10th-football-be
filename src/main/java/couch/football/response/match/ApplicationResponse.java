@@ -9,11 +9,11 @@ public class ApplicationResponse {
 
     private final Long id;
     private final String status;
-    private final int rest;
+    private final Integer rest;
     private final Application application;
 
     @Builder
-    public ApplicationResponse(Long id, String status, int rest, Application application) {
+    public ApplicationResponse(Long id, String status, Integer rest, Application application) {
         this.id = id;
         this.status = status;
         this.rest = rest;

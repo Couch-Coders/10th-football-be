@@ -12,6 +12,7 @@ import couch.football.repository.member.MemberRepository;
 import couch.football.repository.stadium.StadiumRepository;
 import couch.football.response.match.ApplicationResponse;
 import couch.football.response.match.MatchResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,10 @@ class ApplicationServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @BeforeEach
+    void clean() {
+        applicationRepository.deleteAll();
+    }
 
     //Member, Stadium, Match 생성 -> (add+Entity) 메서드 사용하기
     @Test
@@ -139,12 +144,16 @@ class ApplicationServiceTest {
         applicationService.applyMatch(match.getId(), member2); //신청
         applicationService.applyMatch(match.getId(), member3); //신청
         applicationService.applyMatch(match.getId(), member4); //신청
+        applicationService.cancelMatch(match.getId(), member1); //신청취소
 
         //when
         List<Application> memberList = applicationService.getList(match.getId());
 
         //then
-        assertEquals(4, memberList.size());
+        assertEquals(3, memberList.size());
+        assertEquals("bbb222", memberList.get(0).getMember().getUid());
+        assertEquals("ccc333", memberList.get(1).getMember().getUid());
+        assertEquals("ddd444", memberList.get(2).getMember().getUid());
     }
 
     private Stadium addStadium(String name, String content, String address) {

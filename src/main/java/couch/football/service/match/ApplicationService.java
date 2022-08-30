@@ -72,11 +72,11 @@ public class ApplicationService {
 
         List<Application> applications = applicationRepository.findAllByUidAndMatchId(member.getUid(), matchId);
 
-        if (applications.get(0).getMember().getUid().equals(member.getUid())) {
-            applicationRepository.delete(applications.get(0));
+        if (!applications.isEmpty()) {
+            applicationRepository.deleteAll(applications);
         }
 
-        //남은 자리수
+        //신청자수
         int applicantNum = match.getApplicantNum() - 1;
         int rest = match.getMatchNum() - applicantNum;
 
