@@ -12,13 +12,13 @@ public class MatchResponse {
 
     private final Long id;
     private final Stadium stadium;
-    private final int matchNum;
-    private final int applicantNum;
+    private final Integer matchNum;
+    private final Integer applicantNum;
     private final String status;
     private final String gender;
     private final String content;
     private final LocalDateTime startAt;
-    private final LocalDateTime createAt;
+    private final Integer rest;
 
     public MatchResponse(Match match) {
         this.id = match.getId();
@@ -29,12 +29,13 @@ public class MatchResponse {
         this.gender = match.getGender().toString();
         this.content = match.getContent();
         this.startAt = match.getStartAt();
-        this.createAt = match.getCreateAt();
+        this.rest = match.getRest();
     }
 
     @Builder
-    public MatchResponse(Long id, Stadium stadium, int matchNum, int applicantNum
-            , String status, String gender, String content, LocalDateTime startAt, LocalDateTime createAt) {
+
+    public MatchResponse(Long id, Stadium stadium, Integer matchNum, Integer applicantNum,
+                         String status, String gender, String content, LocalDateTime startAt, Integer rest) {
         this.id = id;
         this.stadium = stadium;
         this.matchNum = matchNum;
@@ -43,6 +44,6 @@ public class MatchResponse {
         this.gender = gender;
         this.content = content;
         this.startAt = startAt;
-        this.createAt = createAt;
+        this.rest = rest;
     }
 }
