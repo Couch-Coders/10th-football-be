@@ -27,12 +27,15 @@ public class Member {
 
     private String role;
 
+    private String phone;
+
     @Builder
-    public Member(String uid, String username, String email, String gender, String role) {
+    public Member(String uid, String username, String email, String gender, String role, String phone) {
         this.uid = uid;
         this.username = username;
         this.email = email;
         this.gender = gender;
         this.role = role;
+        this.phone = phone;
     }
 }

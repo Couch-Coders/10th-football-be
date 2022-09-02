@@ -1,14 +1,15 @@
 package couch.football.domain.match;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import couch.football.domain.base.BaseTimeEntity;
 import couch.football.domain.stadium.Stadium;
+import couch.football.request.match.MatchCreateRequest;
+import couch.football.request.match.MatchUpdateRequest;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -32,9 +33,6 @@ public class Match extends BaseTimeEntity {
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
 
-    @OneToMany(mappedBy = "match")
-    private List<Review> reviews = new ArrayList<>();
-
     private Integer matchNum;
 
     private Integer applicantNum;
@@ -48,34 +46,29 @@ public class Match extends BaseTimeEntity {
     @Lob
     private String content;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startAt;
 
+    private Integer matchDay;
+
     @Builder
-    public Match(Stadium stadium, Integer matchNum, MatchGender gender, String content, LocalDateTime startAt) {
+    public Match(Stadium stadium, MatchCreateRequest request) {
         this.stadium = stadium;
-        this.matchNum = matchNum;
+        this.matchNum = request.getMatchNum();
         this.applicantNum = 0;
         this.status = MatchStatus.OPEN;
-        this.gender = gender;
-        this.content = content;
-        this.startAt = startAt;
+        this.gender = MatchGender.valueOf(request.getMatchGender().toUpperCase());
+        this.content = request.getContent();
+        this.startAt = request.getStartAt();
+        this.matchDay = startAt.getDayOfYear();
     }
 
-    public MatchEditor.MatchEditorBuilder toEditor() {
-        return MatchEditor.builder()
-                .stadium(stadium)
-                .matchNum(matchNum)
-                .content(content)
-                .gender(gender)
-                .startAt(startAt);
-    }
-
-    public void edit(MatchEditor matchEditor) {
-        stadium = matchEditor.getStadium();
-        matchNum = matchEditor.getMatchNum();
-        content = matchEditor.getContent();
-        gender = matchEditor.getGender();
-        startAt = matchEditor.getStartAt();
+    public void update(Stadium stadium, MatchUpdateRequest request) {
+        this.stadium = stadium;
+        this.matchNum = request.getMatchNum();
+        this.gender = MatchGender.valueOf(request.getMatchGender().toUpperCase());
+        this.content = request.getContent();
+        this.startAt = request.getStartAt();
     }
 
     public void increaseApplicantNum() {

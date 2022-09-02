@@ -31,9 +31,9 @@ public class Stadium extends BaseTimeEntity {
     @Lob
     private String content;
 
-    private boolean parking;
+    private Boolean parking;
 
-    private boolean rental;
+    private Boolean rental;
 
     private String address;
 
