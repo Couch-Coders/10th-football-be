@@ -25,11 +25,6 @@ public class MatchController {
     private final MatchService matchService;
     private final ApplicationService applicationService;
 
-    @GetMapping("/test")
-    public Integer test(@RequestParam(value = "matchDay", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate matchDay) {
-        return matchDay.getDayOfYear();
-    }
-
     @PostMapping("")
     public void create(@RequestBody @Valid MatchCreateRequest request) {
         matchService.create(request);
