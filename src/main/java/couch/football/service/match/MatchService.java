@@ -1,14 +1,25 @@
 package couch.football.service.match;
 
 import couch.football.domain.match.*;
+import couch.football.domain.member.Member;
 import couch.football.domain.stadium.Stadium;
 import couch.football.repository.match.MatchRepository;
+import couch.football.repository.member.MemberRepository;
 import couch.football.repository.stadium.StadiumRepository;
-import couch.football.request.match.MatchRequest;
+import couch.football.request.match.MatchCreateRequest;
+import couch.football.request.match.MatchUpdateRequest;
+import couch.football.response.match.MatchApplicantResponse;
 import couch.football.response.match.MatchResponse;
+import couch.football.response.match.MatchesResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,80 +27,70 @@ public class MatchService {
 
     private final MatchRepository matchRepository;
     private final StadiumRepository stadiumRepository;
+    private final MemberRepository memberRepository;
 
-    //경기 생성
-    public void create(MatchRequest matchRequest) {
-        //경기장 조회
-        Stadium stadium = stadiumRepository.findById(matchRequest.getStadiumId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기장입니다."));
+    private final ApplicationService applicationService;
+
+    public void create(MatchCreateRequest request) {
+        Stadium stadium = findStadium(request.getStadiumId());
 
         Match match = Match.builder()
                 .stadium(stadium)
-                .matchNum(matchRequest.getMatchNum())
-                .content(matchRequest.getContent())
-                .gender(MatchGender.valueOf(matchRequest.getMatchGender().toUpperCase()))
-                .startAt(matchRequest.getStartAt())
+                .request(request)
                 .build();
 
         matchRepository.save(match);
     }
 
-    //경기 수정
     @Transactional
-    public void update(Long matchId, MatchRequest matchRequest) {
-        //경기장 조회
-        Stadium stadium = stadiumRepository.findById(matchRequest.getStadiumId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기장입니다."));
+    public void update(Long matchId, MatchUpdateRequest request) {
+        Match match = findMatch(matchId);
 
-        //경기 조희
-        Match match = matchRepository.findById(matchId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));
+        Stadium stadium = findStadium(request.getStadiumId());
 
-
-        MatchEditor.MatchEditorBuilder editorBuilder = match.toEditor();
-
-        MatchEditor matchEditor = editorBuilder.stadium(stadium)
-                .matchNum(matchRequest.getMatchNum())
-                .startAt(matchRequest.getStartAt())
-                .content(matchRequest.getContent())
-                .gender(MatchGender.valueOf(matchRequest.getMatchGender().toUpperCase()))
-                .build();
-
-        match.edit(matchEditor);
+        match.update(stadium, request);
     }
 
-    //경기 삭제
     public void delete(Long matchId) {
-        //경기 조희
-        Match match = matchRepository.findById(matchId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));
+        Match match = findMatch(matchId);
 
         matchRepository.delete(match);
     }
 
-
-    //경기 상세 조회
-    public MatchResponse get(Long matchId) {
-
-        Match match = matchRepository.findById(matchId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));
-
-        Stadium stadium = stadiumRepository.findById(match.getStadium().getId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기장입니다."));
-
-        return MatchResponse.builder()
-                .id(match.getId())
-                .stadium(stadium)
-                .matchNum(match.getMatchNum())
-                .applicantNum(match.getApplicantNum())
-                .content(match.getContent())
-                .status(match.getStatus().toString())
-                .gender(match.getGender().toString())
-                .startAt(match.getStartAt())
-                .rest(match.getRest())
-                .build();
-
+    public Page<MatchesResponse> getList(Pageable pageable, LocalDate matchDay, String gender, String status, Integer personnel, String stadiumName) {
+        return matchRepository.findAllBySearchOption(pageable, matchDay, gender, status, personnel, stadiumName)
+                .map(MatchesResponse::new);
     }
 
+    public MatchResponse get(Long matchId) {
+        Match match = matchRepository.findByIdWithFetchJoinStadium(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));;
 
+        List<MatchApplicantResponse> matchApplicants = new ArrayList<>();
+
+        List<Application> applicants = applicationService.getList(matchId);
+        for (Application application : applicants) {
+            Member member = memberRepository.findByUid(application.getMember().getUid())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+            MatchApplicantResponse applicant = new MatchApplicantResponse(member);
+
+            matchApplicants.add(applicant);
+        }
+
+        return MatchResponse.builder()
+                .match(match)
+                .matchApplicants(matchApplicants)
+                .build();
+    }
+
+    private Match findMatch(Long matchId) {
+        return matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));
+    }
+
+    private Stadium findStadium(Long stadiumId) {
+        return stadiumRepository.findById(stadiumId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기장입니다."));
+    }
 }
