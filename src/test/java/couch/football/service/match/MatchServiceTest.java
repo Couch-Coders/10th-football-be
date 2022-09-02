@@ -2,17 +2,19 @@ package couch.football.service.match;
 
 import couch.football.domain.match.Match;
 import couch.football.domain.match.MatchGender;
-import couch.football.domain.match.MatchStatus;
 import couch.football.domain.stadium.Stadium;
 import couch.football.repository.match.MatchRepository;
 import couch.football.repository.stadium.StadiumRepository;
-import couch.football.request.match.MatchRequest;
+import couch.football.request.match.MatchCreateRequest;
+import couch.football.request.match.MatchUpdateRequest;
 import couch.football.response.match.MatchResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,11 +42,11 @@ class MatchServiceTest {
         //given
         Stadium stadium = addStadium("하늘풋살장", "흡연 금지", "서울특별시 영등포구 1234");
 
-        MatchRequest request = MatchRequest.builder()
+        MatchCreateRequest request = MatchCreateRequest.builder()
                 .stadiumId(stadium.getId())
                 .matchNum(12)
                 .matchGender("all")
-                .startAt(null)
+                .startAt(LocalDateTime.now().plusHours(5))
                 .content("조심조심")
                 .build();
 
@@ -57,7 +59,6 @@ class MatchServiceTest {
         assertEquals(12, match.getMatchNum());
         assertEquals("ALL", match.getGender().toString());
         assertEquals("조심조심", match.getContent());
-        assertNull(match.getStartAt());
     }
 
     @Test
@@ -66,9 +67,14 @@ class MatchServiceTest {
         //given
         Stadium stadium1 = addStadium("하늘풋살장", "흡연 금지", "서울특별시 영등포구 1234");
         Stadium stadium2 = addStadium("서울풋살장", "신축", "서울특별시 송파구 2222");
-        Match match = addMatch(stadium1, 12, "all", "조심조심");
 
-        MatchRequest matchUpdate = MatchRequest.builder()
+        Match match = Match.builder()
+                .stadium(stadium1)
+                .request(addMatch(12, "all", "조심조심", LocalDateTime.now().plusHours(1)))
+                .build();
+        matchRepository.save(match);
+
+        MatchUpdateRequest matchUpdate = MatchUpdateRequest.builder()
                 .stadiumId(stadium2.getId())
                 .matchNum(10)
                 .matchGender("male")
@@ -81,7 +87,6 @@ class MatchServiceTest {
 
         //then
         MatchResponse matchResponse = matchService.get(match.getId());
-        assertEquals(stadium2.getId(), matchResponse.getStadium().getId());
         assertEquals(10, matchResponse.getMatchNum());
         assertEquals("수정수정", matchResponse.getContent());
         assertEquals("MALE", matchResponse.getGender());
@@ -92,7 +97,12 @@ class MatchServiceTest {
     void delete() {
         //given
         Stadium stadium = addStadium("하늘풋살장", "흡연 금지", "서울특별시 영등포구 1234");
-        Match match = addMatch(stadium, 12, "all", "조심조심");
+
+        Match match = Match.builder()
+                .stadium(stadium)
+                .request(addMatch(10, "male", "hello", LocalDateTime.now().plusHours(3)))
+                .build();
+        matchRepository.save(match);
 
         //when
         matchService.delete(match.getId());
@@ -118,18 +128,13 @@ class MatchServiceTest {
         return stadium;
     }
 
-    private Match addMatch(Stadium stadium, int matchNum, String gender, String content) {
-        Match match = Match.builder()
-                .stadium(stadium)
+    private MatchCreateRequest addMatch(int matchNum, String gender, String content, LocalDateTime startAt) {
+        return MatchCreateRequest.builder()
                 .matchNum(matchNum)
-                .gender(MatchGender.valueOf(gender.toUpperCase()))
+                .matchGender(gender)
                 .content(content)
-                .startAt(null)
+                .startAt(startAt)
                 .build();
-
-        matchRepository.save(match);
-
-        return match;
     }
 
 

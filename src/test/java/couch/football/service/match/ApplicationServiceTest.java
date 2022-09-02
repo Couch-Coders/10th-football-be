@@ -10,6 +10,7 @@ import couch.football.repository.match.MatchRepository;
 import couch.football.repository.match.ApplicationRepository;
 import couch.football.repository.member.MemberRepository;
 import couch.football.repository.stadium.StadiumRepository;
+import couch.football.request.match.MatchCreateRequest;
 import couch.football.response.match.ApplicationResponse;
 import couch.football.response.match.MatchResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +57,12 @@ class ApplicationServiceTest {
         //given
         Stadium stadium = addStadium("couch", "깔끔", "서울특별시 1234");
         Member member = addMember("minyuk1234", "minyuk", "male", "minyuk@gmail.com");
-        Match match = addMatch(stadium, 12, "male", "조심");
+
+        Match match = Match.builder()
+                .stadium(stadium)
+                .request(addMatch(12, "male", "조심", LocalDateTime.now().plusHours(2)))
+                .build();
+        matchRepository.save(match);
 
         //when
         ApplicationResponse response = applicationService.applyMatch(match.getId(), member); //경기 신청
@@ -77,7 +84,12 @@ class ApplicationServiceTest {
         //given
         Stadium stadium = addStadium("couch", "깔끔", "서울특별시 1234");
         Member member = addMember("minyuk1234", "minyuk", "male", "minyuk@gmail.com");
-        Match match = addMatch(stadium, 12, "female", "조심");
+
+        Match match = Match.builder()
+                .stadium(stadium)
+                .request(addMatch(12, "female", "조심", LocalDateTime.now().plusHours(2)))
+                .build();
+        matchRepository.save(match);
 
         //expected
         assertThrows(IllegalArgumentException.class, () -> {
@@ -92,7 +104,13 @@ class ApplicationServiceTest {
         Stadium stadium = addStadium("couch", "깔끔", "서울특별시 1234");
         Member member1 = addMember("minyuk1234", "minyuk", "male", "minyuk@gmail.com");
         Member member2 = addMember("tester1111", "tester", "female", "tester@gmail.com");
-        Match match = addMatch(stadium, 1, "all", "조심");
+
+        Match match = Match.builder()
+                .stadium(stadium)
+                .request(addMatch(1, "all", "조심", LocalDateTime.now().plusHours(4)))
+                .build();
+        matchRepository.save(match);
+
 
         //when
         applicationService.applyMatch(match.getId(), member1); //경기 신청
@@ -111,7 +129,12 @@ class ApplicationServiceTest {
         //given
         Stadium stadium = addStadium("couch", "깔끔", "서울특별시 1234");
         Member member = addMember("minyuk1234", "minyuk", "male", "minyuk@gmail.com");
-        Match match = addMatch(stadium, 1, "male", "조심");
+
+        Match match = Match.builder()
+                .stadium(stadium)
+                .request(addMatch(1, "male", "조심", LocalDateTime.now().plusHours(2)))
+                .build();
+        matchRepository.save(match);
 
         ApplicationResponse applyResponse = applicationService.applyMatch(match.getId(), member); //신청
 
@@ -138,7 +161,12 @@ class ApplicationServiceTest {
         Member member2 = addMember("bbb222", "b", "female", "bbb@gmail.com");
         Member member3 = addMember("ccc333", "c", "female", "ccc@gmail.com");
         Member member4 = addMember("ddd444", "d", "male", "ddd@gmail.com");
-        Match match = addMatch(stadium, 12, "all", "조심");
+
+        Match match = Match.builder()
+                .stadium(stadium)
+                .request(addMatch(10, "all", "조심", LocalDateTime.now().plusHours(3)))
+                .build();
+        matchRepository.save(match);
 
         applicationService.applyMatch(match.getId(), member1); //신청
         applicationService.applyMatch(match.getId(), member2); //신청
@@ -186,17 +214,12 @@ class ApplicationServiceTest {
         return member;
     }
 
-    private Match addMatch(Stadium stadium, int matchNum, String gender, String content) {
-        Match match = Match.builder()
-                .stadium(stadium)
+    private MatchCreateRequest addMatch(int matchNum, String gender, String content, LocalDateTime startAt) {
+        return MatchCreateRequest.builder()
                 .matchNum(matchNum)
-                .gender(MatchGender.valueOf(gender.toUpperCase()))
+                .matchGender(gender)
                 .content(content)
-                .startAt(null)
+                .startAt(startAt)
                 .build();
-
-        matchRepository.save(match);
-
-        return match;
     }
 }
