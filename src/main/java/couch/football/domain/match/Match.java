@@ -52,7 +52,8 @@ public class Match extends BaseTimeEntity {
     private Integer matchDay;
 
     @Builder
-    public Match(Stadium stadium, MatchCreateRequest request) {
+    public Match(Long id, Stadium stadium, MatchCreateRequest request) {
+        this.id = id;
         this.stadium = stadium;
         this.matchNum = request.getMatchNum();
         this.applicantNum = 0;

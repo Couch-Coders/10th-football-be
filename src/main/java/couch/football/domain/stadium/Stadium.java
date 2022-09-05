@@ -40,7 +40,8 @@ public class Stadium extends BaseTimeEntity {
     private Long likeCount;
 
     @Builder
-    public Stadium(List<File> files, String name, String content, boolean parking, boolean rental, String address, Long likeCount) {
+    public Stadium(Long id, List<File> files, String name, String content, boolean parking, boolean rental, String address, Long likeCount) {
+        this.id = id;
         this.files = files;
         this.name = name;
         this.content = content;

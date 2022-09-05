@@ -32,7 +32,8 @@ public class Application {
     private Match match;
 
     @Builder
-    public Application(Member member, Match match) {
+    public Application(Long id, Member member, Match match) {
+        this.id = id;
         this.member = member;
         this.match = match;
     }
