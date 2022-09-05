@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StaidumCreateReqeust {
+public class StadiumCreateRequest {
 
     @NotBlank(message = "경기장 이름을 입력해야합니다")
     private String name;
@@ -30,7 +30,7 @@ public class StaidumCreateReqeust {
     private List<File> files;
 
     @Builder
-    public StaidumCreateReqeust(String name, String content, Boolean parking, Boolean rental, String address, List<File> files) {
+    public StadiumCreateRequest(String name, String content, Boolean parking, Boolean rental, String address, List<File> files) {
         this.name = name;
         this.content = content;
         this.parking = parking;
@@ -39,7 +39,7 @@ public class StaidumCreateReqeust {
         this.files = files;
     }
 
-    static public Stadium mapToEntity(StaidumCreateReqeust staidumCreateReqeust) {
+    static public Stadium mapToEntity(StadiumCreateRequest staidumCreateReqeust) {
 
         return Stadium.builder()
                 .name(staidumCreateReqeust.getName())
