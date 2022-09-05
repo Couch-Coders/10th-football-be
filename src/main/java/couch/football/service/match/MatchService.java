@@ -32,6 +32,7 @@ public class MatchService {
 
     private final ApplicationService applicationService;
 
+    @Transactional
     public void create(MatchCreateRequest request) {
         Stadium stadium = findStadium(request.getStadiumId());
 
@@ -52,6 +53,7 @@ public class MatchService {
         match.update(stadium, request);
     }
 
+    @Transactional
     public void delete(Long matchId) {
         Match match = findMatch(matchId);
 
