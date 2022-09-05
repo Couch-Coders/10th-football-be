@@ -63,9 +63,27 @@ public class InitDB {
 
             Match match3 = Match.builder()
                     .stadium(stadium2)
-                    .request(addMatch(LocalDateTime.now().plusHours(3), "테스트3", 16, "MALE"))
+                    .request(addMatch(LocalDateTime.now().plusDays(2), "테스트3", 16, "ALL"))
                     .build();
             em.persist(match3);
+
+            Match match4 = Match.builder()
+                    .stadium(stadium2)
+                    .request(addMatch(LocalDateTime.now().plusDays(3).plusHours(4), "테스트4", 12, "MALE"))
+                    .build();
+            em.persist(match4);
+
+            Match match5 = Match.builder()
+                    .stadium(stadium2)
+                    .request(addMatch(LocalDateTime.now().plusDays(3).plusHours(6), "테스트5", 10, "ALL"))
+                    .build();
+            em.persist(match5);
+
+            Match match6 = Match.builder()
+                    .stadium(stadium2)
+                    .request(addMatch(LocalDateTime.now().plusDays(3).plusHours(1), "테스트6", 12, "MALE"))
+                    .build();
+            em.persist(match6);
 
             Application applicant1 = Application.builder()
                     .match(match1)
