@@ -1,11 +1,15 @@
 package couch.football.repository.match;
 
 import couch.football.domain.match.Match;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
 
 public interface MatchRepositoryCustom {
 
-    List<Match> getList(int page); //temp
+    Page<Match> findAllBySearchOption(Pageable pageable, LocalDate matchDay, String gender, String deadline, Integer personnel, String stadiumName);
 
+    Optional<Match> findByIdWithFetchJoinStadium(Long matchId);
 }
