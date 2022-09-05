@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import couch.football.domain.stadium.Stadium;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
-
 import static couch.football.domain.stadium.QStadium.stadium;
 
 @RequiredArgsConstructor

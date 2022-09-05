@@ -1,6 +1,7 @@
 package couch.football.domain.stadium;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,15 @@ public class File {
     private Stadium stadium;
 
     private String imageUrl;
+
+    @Builder
+    public File(Long id, String imageUrl) {
+        this.id = id;
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateFile(String blob) {
+
+        this.imageUrl = blob;
+    }
 }
