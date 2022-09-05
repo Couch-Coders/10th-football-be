@@ -1,24 +1,48 @@
+#spring:
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://ec2-54-225-234-165.compute-1.amazonaws.com:5432/d8f8d15b7r95dl
+#    username: isyjrokcrsvdoo
+#    password: ecd8e5f171fd000ebfe38fb4fa35365b205425d8af0d254d965cb6432400db1a
+#
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_ssql: true
+#
+#  config:
+#    activate:
+#      on-profile: prod
+#
+#  logging:
+#    level:
+#      org.hibernate.SQL: debug
+#      org.hibernate.type: trace
+
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ec2-54-225-234-165.compute-1.amazonaws.com:5432/d8f8d15b7r95dl
-    username: isyjrokcrsvdoo
-    password: ecd8e5f171fd000ebfe38fb4fa35365b205425d8af0d254d965cb6432400db1a
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/datajpa
+    username: sa
+    password:
 
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
         format_ssql: true
 
-  config:
-    activate:
-      on-profile: prod
-
   logging:
     level:
       org.hibernate.SQL: debug
       org.hibernate.type: trace
+
+app:
+  firebase-configuration-file: ./serviceAccountKey.json
+  firebase-bucket: th-football-be.appspot.com
