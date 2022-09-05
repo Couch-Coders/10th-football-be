@@ -17,17 +17,17 @@ public class AuthConfig {
     private final FirebaseAuth firebaseAuth;
 
     @Bean
-//    @Profile("prod")
-    @Profile({"local", "default"})
+    @Profile("prod")
+//    @Profile({"local", "default"})
     public AuthFilterContainer filterContainer() {
         AuthFilterContainer authFilterContainer = new AuthFilterContainer();
         authFilterContainer.setAuthFilter(new JwtFilter(memberService, firebaseAuth));
         return authFilterContainer;
     }
 
-    @Bean
-    @Profile("prod")
-//    @Profile({"local", "default"})
+//    @Bean
+//    @Profile("prod")
+    @Profile({"local", "default"})
     public AuthFilterContainer mockAuthFilter() {
         AuthFilterContainer authFilterContainer = new AuthFilterContainer();
         authFilterContainer.setAuthFilter(new MockJwtFilter(memberService));
