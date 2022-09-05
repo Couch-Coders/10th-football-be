@@ -5,6 +5,7 @@ spring:
     username: isyjrokcrsvdoo
     password: ecd8e5f171fd000ebfe38fb4fa35365b205425d8af0d254d965cb6432400db1a
 
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -12,7 +13,7 @@ spring:
     properties:
       hibernate:
         show_sql: true
-        format_ssql: true
+        format_sql: true
 
   config:
     activate:

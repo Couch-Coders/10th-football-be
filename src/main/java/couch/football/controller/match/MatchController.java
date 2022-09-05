@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -68,5 +69,12 @@ public class MatchController {
         // TODO: 로그인 구현 완료 시 수정 할 예정, service 구현 완료
         Member member = null;
         return applicationService.applyMatch(matchId, member);
+    }
+
+    @GetMapping("/test")
+    public void test(Authentication authentication){
+        Member member = (Member) authentication.getPrincipal();
+        System.out.println(member.getUid());
+        System.out.println(member.getUsername());
     }
 }
