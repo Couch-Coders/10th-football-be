@@ -50,4 +50,13 @@ public class Stadium extends BaseTimeEntity {
         this.address = address;
         this.likeCount = likeCount;
     }
+
+    public void updateStadium(StadiumSaveRequestDto stadiumSaveRequestDto) {
+        this.files = stadiumSaveRequestDto.getFiles();
+        this.name = stadiumSaveRequestDto.getName();
+        this.content = stadiumSaveRequestDto.getContent();
+        this.parking = stadiumSaveRequestDto.getParking();
+        this.rental = stadiumSaveRequestDto.getRental();
+        this.address = stadiumSaveRequestDto.getAddress();
+    }
 }
