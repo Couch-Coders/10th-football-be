@@ -1,6 +1,7 @@
 package couch.football.domain.stadium;
 
 import couch.football.domain.base.BaseTimeEntity;
+import couch.football.request.stadium.StadiumUpdateRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,12 +52,12 @@ public class Stadium extends BaseTimeEntity {
         this.likeCount = likeCount;
     }
 
-    public void updateStadium(StadiumSaveRequestDto stadiumSaveRequestDto) {
-        this.files = stadiumSaveRequestDto.getFiles();
-        this.name = stadiumSaveRequestDto.getName();
-        this.content = stadiumSaveRequestDto.getContent();
-        this.parking = stadiumSaveRequestDto.getParking();
-        this.rental = stadiumSaveRequestDto.getRental();
-        this.address = stadiumSaveRequestDto.getAddress();
+    public void updateStadium(StadiumUpdateRequest stadiumUpdateRequest) {
+        this.files = stadiumUpdateRequest.getFiles();
+        this.name = stadiumUpdateRequest.getName();
+        this.content = stadiumUpdateRequest.getContent();
+        this.parking = stadiumUpdateRequest.getParking();
+        this.rental = stadiumUpdateRequest.getRental();
+        this.address = stadiumUpdateRequest.getAddress();
     }
 }
