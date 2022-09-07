@@ -1,38 +1,35 @@
 package couch.football.controller.stadium;
 
-import couch.football.request.stadium.FileRequest;
-import couch.football.response.stadium.FileResponse;
 import couch.football.service.stadium.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("files")
 public class FileController {
 
     private final FileService fileService;
 
     // 파일 입력 및 저장
-    @PostMapping("/files")
-    public ResponseEntity<FileResponse> uploadFile(@Valid @RequestBody FileRequest fileRequest,
-                                                   @RequestParam MultipartFile imageUrl) throws IOException {
+    @PostMapping("")
+    public List<String> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
-        FileResponse file = fileService.uploadFile(fileRequest, imageUrl.getBytes());
+        List<String> filesResponse = fileService.uploadFile(files);
 
-        return new ResponseEntity<>(file, HttpStatus.CREATED);
+        return filesResponse;
     }
 
     // 파일 보내기
-    @GetMapping("/files/{fileId}")
-    public byte[] downloadProfile(@PathVariable("fileId") Long fileId) {
+    @GetMapping("/{fileId}")
+    public byte[] downloadFile(@PathVariable String fileId) {
 
-        return fileService.getProfile(fileId);
+        return fileService.getFile(fileId);
     }
 }
