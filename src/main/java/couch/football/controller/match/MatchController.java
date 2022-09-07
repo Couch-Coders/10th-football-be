@@ -3,6 +3,7 @@ package couch.football.controller.match;
 import couch.football.domain.member.Member;
 import couch.football.request.match.MatchCreateRequest;
 import couch.football.request.match.MatchUpdateRequest;
+import couch.football.response.match.ApplicationListResponse;
 import couch.football.response.match.ApplicationResponse;
 import couch.football.response.match.MatchResponse;
 import couch.football.response.match.MatchesResponse;
@@ -59,14 +60,16 @@ public class MatchController {
     @PostMapping("/applications/{matchId}")
     public ApplicationResponse apply(@PathVariable Long matchId) {
         // TODO: 로그인 구현 완료 시 수정 할 예정, service 구현 완료
-        Member member = null;
+        Member member = null; // (Member) authentication.getPrincipal();
+
         return applicationService.applyMatch(matchId, member);
     }
 
     @DeleteMapping("/applications/{matchId}")
     public ApplicationResponse applyCancel(@PathVariable Long matchId) {
         // TODO: 로그인 구현 완료 시 수정 할 예정, service 구현 완료
-        Member member = null;
-        return applicationService.applyMatch(matchId, member);
+        Member member = null; // (Member) authentication.getPrincipal();
+
+        return applicationService.cancelMatch(matchId, member);
     }
 }
