@@ -6,6 +6,7 @@ import couch.football.response.stadium.StadiumResponse;
 import couch.football.response.stadium.StadiumSearchResponse;
 import couch.football.service.stadium.StadiumService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("stadiums")
 public class StadiumController {
 
@@ -26,7 +28,7 @@ public class StadiumController {
     }
 
     // 경기장 생성
-    @PostMapping("/get")
+    @PostMapping("")
     public ResponseEntity<StadiumResponse> createStadium(@Valid @RequestBody StadiumCreateRequest stadiumCreateRequest) {
 
         StadiumResponse stadium = stadiumService.createStadium(stadiumCreateRequest);
@@ -35,7 +37,7 @@ public class StadiumController {
     }
 
     // 경기장 전체 조회
-    @GetMapping("/getAll")
+    @GetMapping("/All")
     public ResponseEntity<List<StadiumResponse>> getStadium() {
 
         return ResponseEntity.ok(stadiumService.getAllStadium());
