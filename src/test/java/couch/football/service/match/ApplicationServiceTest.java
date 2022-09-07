@@ -206,7 +206,7 @@ class ApplicationServiceTest {
                 .username(username)
                 .gender(gender)
                 .email(email)
-                .role("ROLE_USER")
+       //         .role("ROLE_USER")
                 .build();
 
         memberRepository.save(member);
