@@ -1,9 +1,5 @@
 spring:
   http:
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
     server:
       servlet:
         encoding:
@@ -32,3 +28,10 @@ spring:
     level:
       org.hibernate.SQL: debug
       org.hibernate.type: trace
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
