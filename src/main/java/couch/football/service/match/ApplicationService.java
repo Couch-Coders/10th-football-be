@@ -30,8 +30,6 @@ public class ApplicationService {
     public ApplicationResponse applyMatch(Long matchId, Member member) {
         Match match = findMatch(matchId);
 
-        member = memberRepository.findByUid("jwt2").orElseThrow(null);
-
         validateApplyMatch(match, member);
 
         Application application = Application.builder()
@@ -57,8 +55,6 @@ public class ApplicationService {
     public ApplicationResponse cancelMatch(Long matchId, Member member) {
         Match match = findMatch(matchId);
 
-        member = memberRepository.findByUid("jwt2").orElseThrow(null);
-
         List<Application> applications = applicationRepository.findAllByUidAndMatchId(member.getUid(), matchId);
 
         if (!applications.isEmpty()) {
@@ -77,8 +73,6 @@ public class ApplicationService {
     }
 
     public Page<ApplicationListResponse> getApplications(Pageable pageable, Member member) {
-        member = memberRepository.findByUid("jwt2").orElseThrow(null);
-
         return applicationRepository.findAllByUid(pageable, member.getUid()).map(ApplicationListResponse::new);
     }
 
