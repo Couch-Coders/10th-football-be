@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -25,13 +24,11 @@ public class File {
     private String imageUrl;
 
     @Builder
-    public File(Long id, String imageUrl) {
-        this.id = id;
+    public File(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
     public void updateFile(String blob) {
-
         this.imageUrl = blob;
     }
 }
