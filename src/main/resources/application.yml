@@ -1,4 +1,10 @@
 spring:
+  http:
+    server:
+      servlet:
+        encoding:
+          force-response: true
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://ec2-54-225-234-165.compute-1.amazonaws.com:5432/d8f8d15b7r95dl
@@ -22,3 +28,10 @@ spring:
     level:
       org.hibernate.SQL: debug
       org.hibernate.type: trace
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
