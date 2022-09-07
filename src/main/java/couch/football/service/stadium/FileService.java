@@ -1,46 +1,43 @@
 package couch.football.service.stadium;
 
 import com.google.cloud.storage.Bucket;
-import couch.football.domain.stadium.File;
-import couch.football.repository.stadium.FileRepository;
-import couch.football.request.stadium.FileRequest;
-import couch.football.response.stadium.FileResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class FileService {
 
-    private final FileRepository fileRepository;
     private final Bucket bucket;
 
-    public FileResponse uploadFile(FileRequest fileRequest, byte[] imageUrl) {
+    // 파일 입력 및 저장
+    public List<String> uploadFile(List<MultipartFile> files) throws IOException {
 
         // File 저장위치를 선언
-        String blob = "/stadiumImage/" + fileRequest.getImageUrl();
+        String blob = "files/" ;
 
-        // 이미 존재하면 파일 삭제
-        if(bucket.get(blob) != null) {
-            bucket.get(blob).delete();
-        }
         // 파일을 Bucket에 저장
-        bucket.create(blob, imageUrl);
+        List<String> urls = new ArrayList<>();
 
-        // DB에 파일정보 업데이트
-        File file = FileRequest.mapToEntity(fileRequest);
-
-        file.updateFile("/stadiumImage/" + file);
-
-        File savedFile = fileRepository.save(file);
-
-        return FileResponse.mapToDto(savedFile);
+        for(MultipartFile file : files) {
+            String url = blob + UUID.randomUUID().toString();
+            bucket.create(url, file.getBytes());
+            urls.add("/" + url);
+        }
+        return urls;
     }
 
-    public byte[] getProfile(Long fileId) {
+    // 파일 보내기
+    public byte[] getFile(String imageUrl) {
 
-        return bucket.get("/files/" + fileId + "/profile").getContent();
+        return bucket.get("files/" + imageUrl).getContent();
     }
 }
