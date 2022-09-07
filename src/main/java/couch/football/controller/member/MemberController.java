@@ -1,4 +1,4 @@
-package couch.football.controller.members;
+package couch.football.controller.member;
 
 import com.google.firebase.auth.FirebaseToken;
 import couch.football.domain.member.Member;
@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-public class Controller {
+//@CrossOrigin("https://football-3b39f.web.app/")
+public class MemberController {
 
     private final MemberService memberService;
     //로그인
