@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
+            response.getWriter().write(e.getMessage());
             return;
         }
 
@@ -58,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
+            response.getWriter().write(e.getMessage());
             return;
         }
         filterChain.doFilter(request, response);
