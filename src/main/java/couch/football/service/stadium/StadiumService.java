@@ -1,6 +1,8 @@
 package couch.football.service.stadium;
 
+import couch.football.domain.stadium.File;
 import couch.football.domain.stadium.Stadium;
+import couch.football.repository.stadium.FileRepository;
 import couch.football.repository.stadium.StadiumRepository;
 import couch.football.request.stadium.StadiumCreateRequest;
 import couch.football.request.stadium.StadiumUpdateRequest;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class StadiumService {
 
     private final StadiumRepository stadiumRepository;
+    private final FileRepository fileRepository;
 
     @Transactional(readOnly = true)
     public List<StadiumSearchResponse> searchAddress(String address) {
@@ -34,7 +38,23 @@ public class StadiumService {
     @Transactional
     public StadiumResponse createStadium(StadiumCreateRequest stadiumCreateRequest) {
 
-        Stadium stadium = StadiumCreateRequest.mapToEntity(stadiumCreateRequest);
+        List<File> files = new ArrayList<>();
+        for(String imageUrl : stadiumCreateRequest.getFiles()) {
+            File file = File.builder()
+                    .imageUrl(imageUrl)
+                    .build();
+            file = fileRepository.save(file);
+            files.add(file);
+        }
+
+        Stadium stadium = Stadium.builder()
+                .name(stadiumCreateRequest.getName())
+                .content(stadiumCreateRequest.getContent())
+                .parking(stadiumCreateRequest.getParking())
+                .rental(stadiumCreateRequest.getRental())
+                .address(stadiumCreateRequest.getAddress())
+                .files(files)
+                .build();
 
         Stadium savedStadium = stadiumRepository.save(stadium);
 
@@ -56,6 +76,7 @@ public class StadiumService {
                 .collect(Collectors.toList());
     }
 
+    // 경기장 한건조회
     @Transactional(readOnly = true)
     public StadiumResponse getByIdStadium(Long stadiumId) {
 
