@@ -1,9 +1,9 @@
 package couch.football.config;
 
-import com.google.cloud.storage.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -43,6 +43,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .antMatchers("/users") //로그인은 로그인이 필요 없다
-                .antMatchers("/favicon.ico");
+                .antMatchers("/favicon.ico")
+                .antMatchers(HttpMethod.GET, "/matches/**");
     }
 }
