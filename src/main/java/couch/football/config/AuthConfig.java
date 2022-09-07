@@ -25,9 +25,9 @@ public class AuthConfig {
         return authFilterContainer;
     }
 
-//    @Bean
-//    @Profile("prod")
+    @Bean
     @Profile({"local", "default"})
+//    @Profile("prod")
     public AuthFilterContainer mockAuthFilter() {
         AuthFilterContainer authFilterContainer = new AuthFilterContainer();
         authFilterContainer.setAuthFilter(new MockJwtFilter(memberService));

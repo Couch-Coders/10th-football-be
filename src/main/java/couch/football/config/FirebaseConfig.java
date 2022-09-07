@@ -15,14 +15,11 @@ import java.io.IOException;
 @Configuration
 public class FirebaseConfig {
 
-    @Value("classpath:config/firebaseKey.json")
-    private Resource resource;
-
     @Bean
     public FirebaseAuth firebaseAuth() throws IOException {
 
         FileInputStream serviceAccount =
-                new FileInputStream(resource.getFile());
+                new FileInputStream("src/main/resources/config/firebaseKey.json");
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
