@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -27,10 +28,10 @@ public class StadiumCreateRequest {
     @NotBlank(message = "경기장 주소를 입력해야합니다")
     private String address;
 
-    private List<File> files;
+    private List<String> files;
 
     @Builder
-    public StadiumCreateRequest(String name, String content, Boolean parking, Boolean rental, String address, List<File> files) {
+    public StadiumCreateRequest(String name, String content, Boolean parking, Boolean rental, String address, List<String> files) {
         this.name = name;
         this.content = content;
         this.parking = parking;
@@ -47,7 +48,6 @@ public class StadiumCreateRequest {
                 .parking(staidumCreateReqeust.getParking())
                 .rental(staidumCreateReqeust.getRental())
                 .address(staidumCreateReqeust.getAddress())
-                .files(staidumCreateReqeust.getFiles())
                 .build();
     }
 }
