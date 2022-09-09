@@ -3,13 +3,13 @@ package couch.football.controller.match;
 import couch.football.domain.member.Member;
 import couch.football.request.match.MatchCreateRequest;
 import couch.football.request.match.MatchUpdateRequest;
-import couch.football.response.match.ApplicationListResponse;
 import couch.football.response.match.ApplicationResponse;
 import couch.football.response.match.MatchResponse;
 import couch.football.response.match.MatchesResponse;
 import couch.football.service.match.ApplicationService;
 import couch.football.service.match.MatchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,6 +22,7 @@ import java.time.LocalDate;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("matches")
+@Slf4j
 public class MatchController {
 
     private final MatchService matchService;
@@ -59,25 +60,16 @@ public class MatchController {
     }
 
     @PostMapping("/applications/{matchId}")
-    public ApplicationResponse apply(@PathVariable Long matchId) {
-        // TODO: 로그인 구현 완료 시 수정 할 예정, service 구현 완료
-        Member member = null; // (Member) authentication.getPrincipal();
+    public ApplicationResponse apply(@PathVariable Long matchId, Authentication authentication) {
+        Member member = (Member) authentication.getPrincipal();
 
         return applicationService.applyMatch(matchId, member);
     }
 
     @DeleteMapping("/applications/{matchId}")
-    public ApplicationResponse applyCancel(@PathVariable Long matchId) {
-        // TODO: 로그인 구현 완료 시 수정 할 예정, service 구현 완료
-        Member member = null; // (Member) authentication.getPrincipal();
+    public ApplicationResponse applyCancel(@PathVariable Long matchId, Authentication authentication) {
+        Member member = (Member) authentication.getPrincipal();
 
         return applicationService.cancelMatch(matchId, member);
-    }
-
-    @GetMapping("/test")
-    public void test(Authentication authentication){
-        Member member = (Member) authentication.getPrincipal();
-        System.out.println(member.getUid());
-        System.out.println(member.getUsername());
     }
 }
