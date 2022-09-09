@@ -1,5 +1,6 @@
 package couch.football.domain.stadium;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import couch.football.domain.base.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.REMOVE;
 
 @Entity
 @Getter
@@ -23,7 +26,7 @@ public class Stadium extends BaseTimeEntity {
     @Column(name = "stadium_id")
     private Long id;
 
-    @OneToMany(mappedBy = "stadium")
+    @OneToMany(mappedBy = "stadium", cascade = REMOVE, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
 
     private String name;
@@ -39,7 +42,8 @@ public class Stadium extends BaseTimeEntity {
 
     private Long likeCount;
 
-    @OneToMany(mappedBy = "stadium", orphanRemoval = true)
+    @OneToMany(mappedBy = "stadium", cascade = REMOVE, orphanRemoval = true)
+    @JsonIgnore
     private List<Like> likes = new ArrayList<>();
 
     @Builder
