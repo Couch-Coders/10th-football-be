@@ -1,24 +1,35 @@
 package couch.football.controller.member;
 
-import com.google.firebase.auth.FirebaseToken;
 import couch.football.domain.member.Member;
-import couch.football.domain.member.Role;
 import couch.football.request.members.MemberInfoRequestDto;
+import couch.football.response.match.ApplicationListResponse;
 import couch.football.response.members.MemberResponseDto;
+import couch.football.service.match.ApplicationService;
 import couch.football.service.member.MemberService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
+@RequestMapping("users")
 //@CrossOrigin("https://football-3b39f.web.app/")
 public class MemberController {
 
     private final MemberService memberService;
+    private final ApplicationService applicationService;
+
+    @GetMapping("/me/applications")
+    public Page<ApplicationListResponse> getApplicationList(Pageable pageable, Authentication authentication) {
+        Member member = (Member) authentication.getPrincipal();
+
+        return applicationService.getApplications(pageable, member);
+    }
+
     //로그인
     //로그인 버튼을 누른 후, 회원이면 정보 return 아니면 회원 가입 절차 (@PostMapping("/users"))
     @GetMapping("/users/me")
