@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("users")
 //@CrossOrigin("https://football-3b39f.web.app/")
 public class MemberController {
 
     private final MemberService memberService;
     private final ApplicationService applicationService;
 
-    @GetMapping("/me/applications")
+    @GetMapping("/users/me/applications")
     public Page<ApplicationListResponse> getApplicationList(Pageable pageable, Authentication authentication) {
         Member member = (Member) authentication.getPrincipal();
 
