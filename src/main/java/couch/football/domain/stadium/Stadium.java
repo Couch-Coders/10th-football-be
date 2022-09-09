@@ -50,4 +50,12 @@ public class Stadium extends BaseTimeEntity {
         this.address = address;
         this.likeCount = likeCount;
     }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
 }
