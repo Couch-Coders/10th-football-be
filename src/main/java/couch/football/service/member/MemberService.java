@@ -5,6 +5,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import couch.football.domain.member.Member;
 import couch.football.domain.member.Role;
+import couch.football.exception.CustomException;
+import couch.football.exception.ErrorCode;
 import couch.football.repository.member.MemberRepository;
 import couch.football.request.members.MemberInfoRequestDto;
 import couch.football.response.members.MemberResponseDto;
@@ -47,7 +49,7 @@ public class MemberService implements UserDetailsService {
     private void duplicateCheck(Member member) {
         boolean existsMember = memberRepository.existsByUid(member.getUid());
         if (existsMember) {
-            throw new IllegalArgumentException("이미 가입된 회원입니다.");
+            throw new CustomException(ErrorCode.EXIST_MEMBER);
         }
     }
 
@@ -73,7 +75,7 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
         return (UserDetails) memberRepository.findByUid(uid).orElseThrow(() -> {
-            throw new UsernameNotFoundException("해당 회원이 존재하지 않습니다");
+            throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
         });
     }
 
