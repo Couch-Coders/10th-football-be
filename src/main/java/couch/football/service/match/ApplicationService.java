@@ -6,7 +6,6 @@ import couch.football.exception.CustomException;
 import couch.football.exception.ErrorCode;
 import couch.football.repository.match.MatchRepository;
 import couch.football.repository.match.ApplicationRepository;
-import couch.football.repository.member.MemberRepository;
 import couch.football.response.match.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,8 +22,6 @@ public class ApplicationService {
 
     private final MatchRepository matchRepository;
     private final ApplicationRepository applicationRepository;
-
-    private final MemberRepository memberRepository;
 
     @Transactional
     public ApplicationResponse applyMatch(Long matchId, Member member) {
