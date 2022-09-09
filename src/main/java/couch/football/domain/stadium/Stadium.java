@@ -11,6 +11,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,6 +40,9 @@ public class Stadium extends BaseTimeEntity {
     private String address;
 
     private Long likeCount;
+
+    @OneToMany(mappedBy = "stadium", cascade = ALL)
+    private List<Like> likes = new ArrayList<>();
 
     @Builder
     public Stadium(Long id, List<File> files, String name, String content, boolean parking, boolean rental, String address, Long likeCount) {

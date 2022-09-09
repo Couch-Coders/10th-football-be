@@ -10,7 +10,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -50,6 +53,12 @@ public class Match extends BaseTimeEntity {
     private LocalDateTime startAt;
 
     private Integer matchDay;
+
+    @OneToMany(mappedBy = "match", cascade = ALL)
+    private List<Application> applications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "match", cascade = ALL)
+    private List<Review> reviews = new ArrayList<>();
 
     @Builder
     public Match(Long id, Stadium stadium, MatchCreateRequest request) {
