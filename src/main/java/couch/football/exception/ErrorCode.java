@@ -16,7 +16,12 @@ public enum ErrorCode {
     CLOSE_MATCH(HttpStatus.BAD_REQUEST, "신청 마감한 경기입니다."),
     DIFFER_GENDER(HttpStatus.BAD_REQUEST, "성별이 다른 경기입니다."),
     NOT_FOUND_MATCH(HttpStatus.NOT_FOUND, "해당 경기를 찾을 수 없습니다."),
+
+    //stadium
     NOT_FOUND_STADIUM(HttpStatus.NOT_FOUND, "해당 경기장을 찾을 수 없습니다."),
+
+    //like
+    EXIST_LIKE(HttpStatus.BAD_REQUEST, "이미 좋아요 누른 경기장입니다."),
 
     //member
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "해당 회원을 찾을 수 없습니다."),
