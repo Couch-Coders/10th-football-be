@@ -35,43 +35,19 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> joinMember(@RequestHeader("Authorization") String header,
                                                         @RequestBody MemberInfoRequestDto memberInfoRequestDto) {
 
-        FirebaseToken decodedToken = memberService.decodeToken(header);
-
-        Member memberRegister = Member.builder()
-                .uid(decodedToken.getUid())
-                .username(decodedToken.getName())
-                .email(decodedToken.getEmail())
-                .phone(memberInfoRequestDto.getPhone())
-                .gender(memberInfoRequestDto.getGender())
-                .role(Role.USER)
-                .build();
-
-        MemberResponseDto responseDto = memberService.saveMember(memberRegister);
+        MemberResponseDto responseDto = memberService.saveMember(header, memberInfoRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(responseDto);
 
     }
 
-
-
     //local 가입
     @PostMapping("/local/users")
     public ResponseEntity<MemberResponseDto> localJoinMember(@RequestHeader("Authorization") String header,
                                                              @RequestBody MemberInfoRequestDto memberInfoRequestDto) {
 
-        String decodedToken = memberService.testDecodeToken(header);
-
-        Member memberRegister = Member.builder()
-                .uid(decodedToken)
-                .username("test")
-                .email("test@email.com")
-                .phone(memberInfoRequestDto.getPhone())
-                .gender(memberInfoRequestDto.getGender())
-                .role(Role.USER)
-                .build();
-
-        MemberResponseDto responseDto = memberService.saveMember(memberRegister);
+        MemberResponseDto responseDto = memberService.saveMember(header, memberInfoRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(responseDto);

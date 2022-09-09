@@ -4,7 +4,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import couch.football.domain.member.Member;
+import couch.football.domain.member.Role;
 import couch.football.repository.member.MemberRepository;
+import couch.football.request.members.MemberInfoRequestDto;
 import couch.football.response.members.MemberResponseDto;
 import couch.football.util.TokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,20 @@ public class MemberService implements UserDetailsService {
     private final FirebaseAuth firebaseAuth;
 
     @Transactional
-    public MemberResponseDto saveMember(Member member) {
+    public MemberResponseDto saveMember(String header, MemberInfoRequestDto request) {
+        FirebaseToken decodedToken = decodeToken(header);
+
+        Member member = Member.builder()
+                .uid(decodedToken.getUid())
+                .username(decodedToken.getName())
+                .email(decodedToken.getEmail())
+                .phone(request.getPhone())
+                .gender(request.getGender())
+                .role(Role.USER)
+                .build();
 
         duplicateCheck(member);
+
         return new MemberResponseDto(memberRepository.save(member));
     }
 
@@ -77,6 +90,23 @@ public class MemberService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "message: "+e.getMessage());
         }
+    }
+
+    @Transactional
+    public MemberResponseDto testSaveMember(String header, MemberInfoRequestDto request) {
+
+        String decodedToken = testDecodeToken(header);
+
+        Member member = Member.builder()
+                .uid(decodedToken)
+                .username("test")
+                .email("test@email.com")
+                .phone(request.getPhone())
+                .gender(request.getGender())
+                .role(Role.USER)
+                .build();
+
+        return new MemberResponseDto(memberRepository.save(member));
     }
 
 }
