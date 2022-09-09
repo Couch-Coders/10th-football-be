@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -54,10 +55,10 @@ public class Match extends BaseTimeEntity {
 
     private Integer matchDay;
 
-    @OneToMany(mappedBy = "match", cascade = ALL)
+    @OneToMany(mappedBy = "match", orphanRemoval = true)
     private List<Application> applications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "match", cascade = ALL)
+    @OneToMany(mappedBy = "match", orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
     @Builder
