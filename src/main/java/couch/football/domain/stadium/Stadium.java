@@ -2,14 +2,9 @@ package couch.football.domain.stadium;
 
 import couch.football.domain.base.BaseTimeEntity;
 import couch.football.request.stadium.StadiumUpdateRequest;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "stadiums")
+@ToString
 public class Stadium extends BaseTimeEntity {
 
     @Id
@@ -24,8 +20,8 @@ public class Stadium extends BaseTimeEntity {
     @Column(name = "stadium_id")
     private Long id;
 
-    @OneToMany(mappedBy = "stadium")
-    private List<File> files = new ArrayList<>();
+    @OneToMany(mappedBy = "stadium", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<File> files;
 
     private String name;
 
@@ -41,7 +37,7 @@ public class Stadium extends BaseTimeEntity {
     private Long likeCount;
 
     @Builder
-    public Stadium(Long id, List<File> files, String name, String content, boolean parking, boolean rental, String address, Long likeCount) {
+    public Stadium(Long id, List<File> files, String name, String content, Boolean parking, Boolean rental, String address, Long likeCount) {
         this.id = id;
         this.files = files;
         this.name = name;
@@ -53,7 +49,7 @@ public class Stadium extends BaseTimeEntity {
     }
 
     public void updateStadium(StadiumUpdateRequest stadiumUpdateRequest) {
-        this.files = stadiumUpdateRequest.getFiles();
+        this.files = files;
         this.name = stadiumUpdateRequest.getName();
         this.content = stadiumUpdateRequest.getContent();
         this.parking = stadiumUpdateRequest.getParking();
