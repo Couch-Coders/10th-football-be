@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,12 +21,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class StadiumService {
 
     private final StadiumRepository stadiumRepository;
     private final FileRepository fileRepository;
 
-    @Transactional(readOnly = true)
     public List<StadiumSearchResponse> searchAddress(String address) {
         return stadiumRepository.findAllBySearchOption(address).stream()
                 .map(StadiumSearchResponse::new)
@@ -38,38 +37,38 @@ public class StadiumService {
     @Transactional
     public StadiumResponse createStadium(StadiumCreateRequest stadiumCreateRequest) {
 
-        List<File> files = new ArrayList<>();
-        for(String imageUrl : stadiumCreateRequest.getFiles()) {
-            File file = File.builder()
-                    .imageUrl(imageUrl)
-                    .build();
-            file = fileRepository.save(file);
-            files.add(file);
-        }
-
         Stadium stadium = Stadium.builder()
                 .name(stadiumCreateRequest.getName())
                 .content(stadiumCreateRequest.getContent())
                 .parking(stadiumCreateRequest.getParking())
                 .rental(stadiumCreateRequest.getRental())
                 .address(stadiumCreateRequest.getAddress())
-                .files(files)
                 .build();
 
-        Stadium savedStadium = stadiumRepository.save(stadium);
+        stadium = stadiumRepository.save(stadium);
 
-        return StadiumResponse.mapToDto(savedStadium);
+        List<File> files = new ArrayList<>();
+
+        for(String imageUrl : stadiumCreateRequest.getFiles()) {
+            File file = File.builder()
+                    .stadium(stadium)
+                    .imageUrl(imageUrl)
+                    .build();
+            file = fileRepository.save(file);
+            files.add(file);
+        }
+
+        StadiumResponse stadiumResponse = StadiumResponse.mapToDto(stadium);
+
+        stadiumResponse.setFiles(files);
+
+        return stadiumResponse;
     }
 
     // 경기장 전체조회
-    @Transactional(readOnly = true)
     public List<StadiumResponse> getAllStadium() {
 
         List<Stadium> stadiumList = stadiumRepository.findAll();
-
-        for (Stadium stadium : stadiumList) {
-            log.info("stadiumList :{}", stadium);
-        }
 
         return stadiumList.stream()
                 .map(StadiumResponse::mapToDto)
@@ -77,11 +76,9 @@ public class StadiumService {
     }
 
     // 경기장 한건조회
-    @Transactional(readOnly = true)
     public StadiumResponse getByIdStadium(Long stadiumId) {
 
-        Stadium findStadium = stadiumRepository.findById(stadiumId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "경기장이 존재하지 않습니다"));
+        Stadium findStadium = findStadium(stadiumId);
 
         return StadiumResponse.mapToDto(findStadium);
     }
@@ -90,22 +87,42 @@ public class StadiumService {
     @Transactional
     public StadiumResponse updateStadium(Long stadiumId, StadiumUpdateRequest stadiumUpdateRequest) {
 
-        Stadium findStadium = stadiumRepository.findById(stadiumId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "경기장이 존재하지 않습니다"));
+        Stadium findStadium = findStadium(stadiumId);
+
+        List<File> files = new ArrayList<>();
+
+        for(String imageUrl : stadiumUpdateRequest.getFiles()) {
+            File file = File.builder()
+                    .stadium(findStadium)
+                    .imageUrl(imageUrl)
+                    .build();
+                file = fileRepository.save(file);
+                files.add(file);
+        }
 
         findStadium.updateStadium(stadiumUpdateRequest);
 
-        return StadiumResponse.mapToDto(findStadium);
+        StadiumResponse updateStadium = StadiumResponse.mapToDto(findStadium);
+
+        updateStadium.setFiles(files);
+
+        return updateStadium;
     }
 
     // 경기장 삭제
     @Transactional
     public void deleteStadium(Long stadiumId) {
 
-        Stadium findStadium = stadiumRepository.findById(stadiumId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "경기장이 존재하지 않습니다"));
+        Stadium findStadium = findStadium(stadiumId);
 
         stadiumRepository.delete(findStadium);
+    }
+
+    private Stadium findStadium(Long stadiumId) {
+
+        return stadiumRepository.findById(stadiumId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "경기장이 존재하지 않습니다"));
+
     }
 
 }
