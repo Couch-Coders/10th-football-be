@@ -1,7 +1,5 @@
 package couch.football.request.stadium;
 
-import couch.football.domain.stadium.File;
-import couch.football.domain.stadium.Stadium;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -18,27 +16,15 @@ public class StadiumUpdateRequest {
     private Boolean parking;
     private Boolean rental;
     private String address;
-    private List<File> files;
+    private List<String> files;
 
     @Builder
-    public StadiumUpdateRequest(String name, String content, Boolean parking, Boolean rental, String address, List<File> files) {
+    public StadiumUpdateRequest(String name, String content, Boolean parking, Boolean rental, String address, List<String> files) {
         this.name = name;
         this.content = content;
         this.parking = parking;
         this.rental = rental;
         this.address = address;
         this.files = files;
-    }
-
-    static public Stadium mapToEntity (StadiumUpdateRequest stadiumUpdateRequest) {
-
-        return Stadium.builder()
-                .name(stadiumUpdateRequest.getName())
-                .content(stadiumUpdateRequest.getContent())
-                .parking(stadiumUpdateRequest.getParking())
-                .rental(stadiumUpdateRequest.getRental())
-                .address(stadiumUpdateRequest.getAddress())
-                .files(stadiumUpdateRequest.getFiles())
-                .build();
     }
 }
