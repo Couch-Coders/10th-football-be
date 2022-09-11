@@ -37,7 +37,7 @@ public class StadiumController {
     }
 
     // 경기장 전체 조회
-    @GetMapping("/All")
+    @GetMapping("/all")
     public ResponseEntity<List<StadiumResponse>> getStadium() {
 
         return ResponseEntity.ok(stadiumService.getAllStadium());
