@@ -29,9 +29,14 @@ spring:
       org.hibernate.SQL: debug
       org.hibernate.type: trace
 
+app:
+  firebase-configuration-file: ./serviceAccountKey.json
+  firebase-bucket: th-football-be.appspot.com
+
 server:
   servlet:
     encoding:
       charset: UTF-8
       enabled: true
       force: true
+
