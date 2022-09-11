@@ -56,11 +56,9 @@ public class Match extends BaseTimeEntity {
     private Integer matchDay;
 
     @OneToMany(mappedBy = "match", cascade = REMOVE, orphanRemoval = true)
-    @JsonIgnore
     private List<Application> applications = new ArrayList<>();
 
     @OneToMany(mappedBy = "match", cascade = REMOVE, orphanRemoval = true)
-    @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
 
     @Builder
