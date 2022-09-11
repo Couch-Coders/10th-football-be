@@ -24,11 +24,9 @@ public class File {
     private String imageUrl;
 
     @Builder
-    public File(String imageUrl) {
+    public File(Long id, String imageUrl, Stadium stadium) {
+        this.id = id;
+        this.stadium = stadium;
         this.imageUrl = imageUrl;
-    }
-
-    public void updateFile(String blob) {
-        this.imageUrl = blob;
     }
 }
