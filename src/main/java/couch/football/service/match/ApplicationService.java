@@ -7,6 +7,7 @@ import couch.football.exception.ErrorCode;
 import couch.football.repository.match.MatchRepository;
 import couch.football.repository.match.ApplicationRepository;
 import couch.football.response.match.*;
+import couch.football.response.members.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +45,7 @@ public class ApplicationService {
                 .rest(match.getRest())
                 .status(match.getStatus().toString())
                 .applicationId(application.getId())
-                .applicant(new MatchApplicantResponse(member))
+                .applicant(new MemberResponseDto(member))
                 .build();
     }
 

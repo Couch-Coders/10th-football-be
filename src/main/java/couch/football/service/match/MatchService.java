@@ -10,9 +10,9 @@ import couch.football.repository.member.MemberRepository;
 import couch.football.repository.stadium.StadiumRepository;
 import couch.football.request.match.MatchCreateRequest;
 import couch.football.request.match.MatchUpdateRequest;
-import couch.football.response.match.MatchApplicantResponse;
+import couch.football.response.match.MatchDetailResponse;
 import couch.football.response.match.MatchResponse;
-import couch.football.response.match.MatchesResponse;
+import couch.football.response.members.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,28 +63,24 @@ public class MatchService {
         matchRepository.delete(match);
     }
 
-    public Page<MatchesResponse> getList(Pageable pageable, LocalDate matchDay, String gender, String status, Integer personnel, String stadiumName) {
+    public Page<MatchResponse> getList(Pageable pageable, LocalDate matchDay, String gender, String status, Integer personnel, String stadiumName) {
         return matchRepository.findAllBySearchOption(pageable, matchDay, gender, status, personnel, stadiumName)
-                .map(MatchesResponse::new);
+                .map(MatchResponse::new);
     }
 
-    public MatchResponse get(Long matchId) {
+    public MatchDetailResponse get(Long matchId) {
         Match match = matchRepository.findByIdWithFetchJoinStadium(matchId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MATCH));
 
-        List<MatchApplicantResponse> matchApplicants = new ArrayList<>();
-
-        List<Application> applicants = applicationService.getList(matchId);
-        for (Application application : applicants) {
+        List<MemberResponseDto> matchApplicants = new ArrayList<>();
+        for (Application application : applicationService.getList(matchId)) {
             Member member = memberRepository.findByUid(application.getMember().getUid())
                     .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
 
-            MatchApplicantResponse applicant = new MatchApplicantResponse(member);
-
-            matchApplicants.add(applicant);
+            matchApplicants.add(new MemberResponseDto(member));
         }
 
-        return MatchResponse.builder()
+        return MatchDetailResponse.builder()
                 .match(match)
                 .matchApplicants(matchApplicants)
                 .build();
