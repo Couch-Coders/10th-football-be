@@ -21,14 +21,12 @@ public class FileController {
     @PostMapping("")
     public List<String> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
-        List<String> filesResponse = fileService.uploadFile(files);
-
-        return filesResponse;
+        return fileService.uploadFile(files);
     }
 
     // 파일 보내기
     @GetMapping("/{fileId}")
-    public byte[] downloadFile(@PathVariable String fileId) {
+    public byte[] getFile(@PathVariable String fileId) {
 
         return fileService.getFile(fileId);
     }
