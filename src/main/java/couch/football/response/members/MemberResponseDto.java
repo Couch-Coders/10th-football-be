@@ -4,8 +4,10 @@ import couch.football.domain.member.Member;
 import couch.football.domain.member.Role;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class MemberResponseDto {
 
     private String uid;

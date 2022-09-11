@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 public class ApplicationListResponse {
 
     private Long applicationId;
-    private MatchesResponse match;
+    private MatchResponse match;
 
     @Builder
     public ApplicationListResponse(Application application) {
         this.applicationId = application.getId();
-        this.match = new MatchesResponse(application.getMatch());
+        this.match = new MatchResponse(application.getMatch());
     }
 }

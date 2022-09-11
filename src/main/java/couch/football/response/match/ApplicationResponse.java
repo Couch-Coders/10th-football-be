@@ -1,6 +1,7 @@
 package couch.football.response.match;
 
 import couch.football.domain.match.Application;
+import couch.football.response.members.MemberResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,10 +14,10 @@ public class ApplicationResponse {
     private Integer rest;
     private String status;
     private Long applicationId;
-    private MatchApplicantResponse applicant;
+    private MemberResponseDto applicant;
 
     @Builder
-    public ApplicationResponse(Long matchId, Integer rest, String status, Long applicationId, MatchApplicantResponse applicant) {
+    public ApplicationResponse(Long matchId, Integer rest, String status, Long applicationId, MemberResponseDto applicant) {
         this.matchId = matchId;
         this.rest = rest;
         this.status = status;

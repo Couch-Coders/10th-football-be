@@ -1,20 +1,18 @@
 package couch.football.response.match;
 
 import couch.football.domain.match.Match;
-import couch.football.domain.stadium.Stadium;
-import lombok.Builder;
+import couch.football.response.stadium.StadiumResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class MatchResponse {
 
     private Long id;
-    private Stadium stadium;
+    private StadiumResponse stadium;
     private Integer matchNum;
     private Integer applicantNum;
     private String status;
@@ -22,12 +20,10 @@ public class MatchResponse {
     private String content;
     private LocalDateTime startAt;
     private Integer rest;
-    private List<MatchApplicantResponse> matchApplicants;
 
-    @Builder
-    public MatchResponse(Match match, List<MatchApplicantResponse> matchApplicants) {
+    public MatchResponse(Match match) {
         this.id = match.getId();
-        this.stadium = match.getStadium();
+        this.stadium = StadiumResponse.mapToDto(match.getStadium());
         this.matchNum = match.getMatchNum();
         this.applicantNum = match.getApplicantNum();
         this.status = match.getStatus().toString();
@@ -35,6 +31,6 @@ public class MatchResponse {
         this.content = match.getContent();
         this.startAt = match.getStartAt();
         this.rest = match.getRest();
-        this.matchApplicants = matchApplicants;
     }
+
 }
