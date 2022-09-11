@@ -1,11 +1,14 @@
 package couch.football.domain.stadium;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import couch.football.domain.base.BaseTimeEntity;
 import couch.football.request.stadium.StadiumUpdateRequest;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.util.List;
+
+import static javax.persistence.CascadeType.REMOVE;
 
 @Entity
 @Getter
@@ -20,8 +23,8 @@ public class Stadium extends BaseTimeEntity {
     @Column(name = "stadium_id")
     private Long id;
 
-    @OneToMany(mappedBy = "stadium", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<File> files;
+    @OneToMany(mappedBy = "stadium", cascade = REMOVE, orphanRemoval = true)
+    private List<File> files = new ArrayList<>();
 
     private String name;
 
@@ -35,6 +38,10 @@ public class Stadium extends BaseTimeEntity {
     private String address;
 
     private Long likeCount;
+
+    @OneToMany(mappedBy = "stadium", cascade = REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<Like> likes = new ArrayList<>();
 
     @Builder
     public Stadium(Long id, List<File> files, String name, String content, Boolean parking, Boolean rental, String address, Long likeCount) {
@@ -55,5 +62,13 @@ public class Stadium extends BaseTimeEntity {
         this.parking = stadiumUpdateRequest.getParking();
         this.rental = stadiumUpdateRequest.getRental();
         this.address = stadiumUpdateRequest.getAddress();
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
     }
 }

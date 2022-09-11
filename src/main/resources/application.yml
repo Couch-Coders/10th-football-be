@@ -1,4 +1,10 @@
 spring:
+  http:
+    server:
+      servlet:
+        encoding:
+          force-response: true
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://ec2-54-225-234-165.compute-1.amazonaws.com:5432/d8f8d15b7r95dl
@@ -12,7 +18,7 @@ spring:
     properties:
       hibernate:
         show_sql: true
-        format_ssql: true
+        format_sql: true
 
   config:
     activate:
@@ -26,3 +32,11 @@ spring:
 app:
   firebase-configuration-file: ./serviceAccountKey.json
   firebase-bucket: th-football-be.appspot.com
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+

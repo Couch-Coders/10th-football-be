@@ -24,7 +24,7 @@ public class Application {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "uid")
     private Member member;
 
     @ManyToOne(fetch = LAZY)

@@ -9,16 +9,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApplicationResponse {
 
-    private Long id;
-    private String status;
+    private Long matchId;
     private Integer rest;
-    private Application application;
+    private String status;
+    private Long applicationId;
+    private MatchApplicantResponse applicant;
 
     @Builder
-    public ApplicationResponse(Long id, String status, Integer rest, Application application) {
-        this.id = id;
-        this.status = status;
+    public ApplicationResponse(Long matchId, Integer rest, String status, Long applicationId, MatchApplicantResponse applicant) {
+        this.matchId = matchId;
         this.rest = rest;
-        this.application = application;
+        this.status = status;
+        this.applicationId = applicationId;
+        this.applicant = applicant;
     }
 }

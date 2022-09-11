@@ -3,6 +3,8 @@ package couch.football.service.match;
 import couch.football.domain.match.*;
 import couch.football.domain.member.Member;
 import couch.football.domain.stadium.Stadium;
+import couch.football.exception.CustomException;
+import couch.football.exception.ErrorCode;
 import couch.football.repository.match.MatchRepository;
 import couch.football.repository.member.MemberRepository;
 import couch.football.repository.stadium.StadiumRepository;
@@ -67,14 +69,14 @@ public class MatchService {
 
     public MatchResponse get(Long matchId) {
         Match match = matchRepository.findByIdWithFetchJoinStadium(matchId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));;
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MATCH));
 
         List<MatchApplicantResponse> matchApplicants = new ArrayList<>();
 
         List<Application> applicants = applicationService.getList(matchId);
         for (Application application : applicants) {
             Member member = memberRepository.findByUid(application.getMember().getUid())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
 
             MatchApplicantResponse applicant = new MatchApplicantResponse(member);
 
@@ -89,11 +91,11 @@ public class MatchService {
 
     private Match findMatch(Long matchId) {
         return matchRepository.findById(matchId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MATCH));
     }
 
     private Stadium findStadium(Long stadiumId) {
         return stadiumRepository.findById(stadiumId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 경기장입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STADIUM));
     }
 }

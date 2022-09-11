@@ -3,18 +3,19 @@ package couch.football.domain.member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.springframework.data.domain.Persistable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Collection;
+
 
 @Entity
 @Getter
-@ToString
 @NoArgsConstructor
 @Table(name = "members")
-public class Member {
+public class Member implements UserDetails, Persistable<String> {
 
     @Id
     private String uid;
@@ -23,19 +24,62 @@ public class Member {
 
     private String email;
 
-    private String gender;
-
-    private String role;
-
     private String phone;
 
+    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Builder
-    public Member(String uid, String username, String email, String gender, String role, String phone) {
+    public Member(String uid, String username, String email, String phone, String gender, Role role) {
         this.uid = uid;
         this.username = username;
         this.email = email;
+        this.phone = phone;
         this.gender = gender;
         this.role = role;
-        this.phone = phone;
+    }
+
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
+    @Override
+    public String getId() {
+        return null;
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 }

@@ -9,9 +9,11 @@ import couch.football.response.match.MatchesResponse;
 import couch.football.service.match.ApplicationService;
 import couch.football.service.match.MatchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("matches")
+@Slf4j
 public class MatchController {
 
     private final MatchService matchService;
@@ -57,16 +60,16 @@ public class MatchController {
     }
 
     @PostMapping("/applications/{matchId}")
-    public ApplicationResponse apply(@PathVariable Long matchId) {
-        // TODO: 로그인 구현 완료 시 수정 할 예정, service 구현 완료
-        Member member = null;
+    public ApplicationResponse apply(@PathVariable Long matchId, Authentication authentication) {
+        Member member = (Member) authentication.getPrincipal();
+
         return applicationService.applyMatch(matchId, member);
     }
 
     @DeleteMapping("/applications/{matchId}")
-    public ApplicationResponse applyCancel(@PathVariable Long matchId) {
-        // TODO: 로그인 구현 완료 시 수정 할 예정, service 구현 완료
-        Member member = null;
-        return applicationService.applyMatch(matchId, member);
+    public ApplicationResponse applyCancel(@PathVariable Long matchId, Authentication authentication) {
+        Member member = (Member) authentication.getPrincipal();
+
+        return applicationService.cancelMatch(matchId, member);
     }
 }
