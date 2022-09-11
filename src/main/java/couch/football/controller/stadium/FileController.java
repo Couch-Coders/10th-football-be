@@ -25,9 +25,8 @@ public class FileController {
     }
 
     // 파일 보내기
-    @GetMapping("/{fileId}")
-    public byte[] getFile(@PathVariable String fileId) {
-
-        return fileService.getFile(fileId);
+    @GetMapping("/{imageUrl}")
+    public byte[] getFile(@PathVariable String imageUrl) {
+        return fileService.getFile(imageUrl);
     }
 }
