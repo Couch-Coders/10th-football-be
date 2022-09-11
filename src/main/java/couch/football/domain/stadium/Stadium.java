@@ -6,6 +6,7 @@ import couch.football.request.stadium.StadiumUpdateRequest;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.REMOVE;
@@ -24,7 +25,7 @@ public class Stadium extends BaseTimeEntity {
     private Long id;
 
     @OneToMany(mappedBy = "stadium", cascade = REMOVE, orphanRemoval = true)
-    private List<File> files = new ArrayList<>();
+    private List<File> files;
 
     private String name;
 
@@ -44,7 +45,7 @@ public class Stadium extends BaseTimeEntity {
     private List<Like> likes = new ArrayList<>();
 
     @Builder
-    public Stadium(Long id, List<File> files, String name, String content, Boolean parking, Boolean rental, String address, Long likeCount) {
+    public Stadium(Long id, List<File> files, String name, String content, Boolean parking, Boolean rental, String address) {
         this.id = id;
         this.files = files;
         this.name = name;
@@ -52,7 +53,7 @@ public class Stadium extends BaseTimeEntity {
         this.parking = parking;
         this.rental = rental;
         this.address = address;
-        this.likeCount = likeCount;
+        this.likeCount = 0L;
     }
 
     public void updateStadium(StadiumUpdateRequest stadiumUpdateRequest) {

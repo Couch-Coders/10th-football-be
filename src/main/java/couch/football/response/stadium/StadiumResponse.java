@@ -19,16 +19,18 @@ public class StadiumResponse {
     private Boolean parking;
     private Boolean rental;
     private String address;
+    private Long likeCount;
     private List<FileResponse> files;
 
     @Builder
-    public StadiumResponse(Long id, String name, String content, Boolean parking, Boolean rental, String address, List<File> files) {
+    public StadiumResponse(Long id, String name, String content, Boolean parking, Boolean rental, String address, Long likeCount, List<File> files) {
         this.id = id;
         this.name = name;
         this.content = content;
         this.parking = parking;
         this.rental = rental;
         this.address = address;
+        this.likeCount = likeCount;
         setFiles(files);
     }
 
@@ -47,6 +49,7 @@ public class StadiumResponse {
                 .parking(stadium.getParking())
                 .rental(stadium.getRental())
                 .address(stadium.getAddress())
+                .likeCount(stadium.getLikeCount())
                 .files(stadium.getFiles())
                 .build();
     }
