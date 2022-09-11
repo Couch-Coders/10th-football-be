@@ -1,14 +1,10 @@
 package couch.football.request.stadium;
 
-import couch.football.domain.stadium.File;
-import couch.football.domain.stadium.Stadium;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -38,16 +34,5 @@ public class StadiumCreateRequest {
         this.rental = rental;
         this.address = address;
         this.files = files;
-    }
-
-    static public Stadium mapToEntity(StadiumCreateRequest staidumCreateReqeust) {
-
-        return Stadium.builder()
-                .name(staidumCreateReqeust.getName())
-                .content(staidumCreateReqeust.getContent())
-                .parking(staidumCreateReqeust.getParking())
-                .rental(staidumCreateReqeust.getRental())
-                .address(staidumCreateReqeust.getAddress())
-                .build();
     }
 }
