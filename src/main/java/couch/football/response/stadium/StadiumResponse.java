@@ -6,8 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,7 +19,7 @@ public class StadiumResponse {
     private Boolean parking;
     private Boolean rental;
     private String address;
-    private List<File> files;
+    private List<FileResponse> files;
 
     @Builder
     public StadiumResponse(Long id, String name, String content, Boolean parking, Boolean rental, String address, List<File> files) {
@@ -29,7 +29,13 @@ public class StadiumResponse {
         this.parking = parking;
         this.rental = rental;
         this.address = address;
-        this.files = files;
+        setFiles(files);
+    }
+
+    public void setFiles(List<File> files){
+        if(files != null) {
+            this.files = files.stream().map(FileResponse::new).collect(Collectors.toList());
+        }
     }
 
     static public StadiumResponse mapToDto(Stadium stadium) {
