@@ -4,8 +4,8 @@ import couch.football.domain.member.Member;
 import couch.football.request.match.MatchCreateRequest;
 import couch.football.request.match.MatchUpdateRequest;
 import couch.football.response.match.ApplicationResponse;
+import couch.football.response.match.MatchDetailResponse;
 import couch.football.response.match.MatchResponse;
-import couch.football.response.match.MatchesResponse;
 import couch.football.service.match.ApplicationService;
 import couch.football.service.match.MatchService;
 import lombok.RequiredArgsConstructor;
@@ -34,18 +34,18 @@ public class MatchController {
     }
 
     @GetMapping("")
-    public Page<MatchesResponse> getList(Pageable pageable,
-                                         @RequestParam(value = "matchDay", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate matchDay,
-                                         @RequestParam(value = "gender", required = false) String gender,
-                                         @RequestParam(value = "status", required = false) String status,
-                                         @RequestParam(value = "personnel", required = false) Integer personnel,
-                                         @RequestParam(value = "stadiumName", required = false) String stadiumName) {
+    public Page<MatchResponse> getList(Pageable pageable,
+                                       @RequestParam(value = "matchDay", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate matchDay,
+                                       @RequestParam(value = "gender", required = false) String gender,
+                                       @RequestParam(value = "status", required = false) String status,
+                                       @RequestParam(value = "personnel", required = false) Integer personnel,
+                                       @RequestParam(value = "stadiumName", required = false) String stadiumName) {
 
         return matchService.getList(pageable, matchDay, gender, status, personnel, stadiumName);
     }
 
     @GetMapping("/{matchId}")
-    public MatchResponse get(@PathVariable Long matchId) {
+    public MatchDetailResponse get(@PathVariable Long matchId) {
         return matchService.get(matchId);
     }
 
