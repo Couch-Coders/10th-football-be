@@ -41,7 +41,6 @@ public class Stadium extends BaseTimeEntity {
     private Long likeCount;
 
     @OneToMany(mappedBy = "stadium", cascade = REMOVE, orphanRemoval = true)
-    @JsonIgnore
     private List<Like> likes = new ArrayList<>();
 
     @Builder
