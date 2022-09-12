@@ -30,8 +30,8 @@ spring:
       org.hibernate.type: trace
 
 app:
-  firebase-configuration-file: ./serviceAccountKey.json
-  firebase-bucket: th-football-be.appspot.com
+  firebase-configuration-file: ./config/firebaseKey.json
+  firebase-bucket: football-3b39f.appspot.com
 
 server:
   servlet:
