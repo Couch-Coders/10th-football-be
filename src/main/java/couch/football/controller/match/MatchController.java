@@ -8,6 +8,7 @@ import couch.football.response.match.MatchDetailResponse;
 import couch.football.response.match.MatchResponse;
 import couch.football.service.match.ApplicationService;
 import couch.football.service.match.MatchService;
+import couch.football.util.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 
@@ -45,8 +47,10 @@ public class MatchController {
     }
 
     @GetMapping("/{matchId}")
-    public MatchDetailResponse get(@PathVariable Long matchId) {
-        return matchService.get(matchId);
+    public MatchDetailResponse get(@PathVariable Long matchId, HttpServletRequest request) {
+        String header = TokenUtil.getAuthorizationToken(request);
+
+        return matchService.get(matchId, header);
     }
 
     @PatchMapping("/{matchId}")

@@ -13,12 +13,16 @@ import java.util.List;
 public class MatchDetailResponse {
 
     private MatchResponse match;
+    private Boolean applyStatus;
+    private Boolean likeStatus;
     private List<MemberResponseDto> matchApplicants;
     private List<ReviewResponseDto> matchReviews;
 
     @Builder
-    public MatchDetailResponse(Match match, List<MemberResponseDto> matchApplicants, List<ReviewResponseDto> matchReviews) {
+    public MatchDetailResponse(Match match, Boolean applyStatus, Boolean likeStatus, List<MemberResponseDto> matchApplicants, List<ReviewResponseDto> matchReviews) {
         this.match = new MatchResponse(match);
+        this.applyStatus = applyStatus;
+        this.likeStatus = likeStatus;
         this.matchApplicants = matchApplicants;
         this.matchReviews = matchReviews;
     }

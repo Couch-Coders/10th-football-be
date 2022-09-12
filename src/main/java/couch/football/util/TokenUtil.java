@@ -26,6 +26,8 @@ public class TokenUtil {
 
     //Filter
     public static String getAuthorizationToken (HttpServletRequest request) {
-        return getAuthorizationToken(request.getHeader("Authorization"));
+        String authorization = request.getHeader("Authorization");
+        if (authorization == null || authorization == "") return null;
+        return getAuthorizationToken(authorization);
     }
 }
