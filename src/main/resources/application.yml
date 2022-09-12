@@ -29,6 +29,11 @@ spring:
       org.hibernate.SQL: debug
       org.hibernate.type: trace
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
 app:
   firebase-configuration-file: ./config/firebaseKey.json
   firebase-bucket: football-3b39f.appspot.com
