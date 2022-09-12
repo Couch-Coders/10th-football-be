@@ -53,11 +53,9 @@ public class ApplicationService {
     public ApplicationResponse cancelMatch(Long matchId, Member member) {
         Match match = findMatch(matchId);
 
-        List<Application> applications = applicationRepository.findAllByUidAndMatchId(member.getUid(), matchId);
+        Application application = applicationRepository.findByUidAndMatchId(member.getUid(), matchId);
 
-        if (!applications.isEmpty()) {
-            applicationRepository.deleteAll(applications);
-        }
+        applicationRepository.delete(application);
 
         match.decreaseApplicantNum();
 
@@ -91,11 +89,6 @@ public class ApplicationService {
 
         if (match.getStatus().equals(MatchStatus.CLOSE)) {
             throw new CustomException(ErrorCode.CLOSE_MATCH);
-        }
-
-        List<Application> applications = applicationRepository.findAllByUidAndMatchId(member.getUid(), match.getId());
-        if (!applications.isEmpty()) {
-            throw new CustomException(ErrorCode.EXIST_APPLY);
         }
     }
 

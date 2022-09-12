@@ -3,6 +3,7 @@ package couch.football.repository.match;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import couch.football.domain.match.Application;
+import couch.football.domain.match.QApplication;
 import couch.football.domain.match.QMatch;
 import couch.football.domain.member.QMember;
 import couch.football.domain.stadium.QFile;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static couch.football.domain.match.QApplication.application;
 import static couch.football.domain.match.QMatch.match;
@@ -25,12 +27,12 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Application> findAllByUidAndMatchId(String uid, Long matchId) {
-        List<Application> applications = queryFactory.selectFrom(application)
-                .where(eqUid(uid), eqMatchId(matchId))
-                .fetch();
+    public Application findByUidAndMatchId(String uid, Long matchId) {
 
-        return applications;
+        return queryFactory.selectFrom(QApplication.application)
+                .where(eqUid(uid), eqMatchId(matchId))
+                .fetchOne();
+
     }
 
     @Override
