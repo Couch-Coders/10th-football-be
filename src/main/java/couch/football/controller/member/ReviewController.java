@@ -6,10 +6,7 @@ import couch.football.service.member.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("reviews")
@@ -19,12 +16,20 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("")
-    public ResponseEntity createReviews(Authentication authentication,
+    public ResponseEntity<String> createReviews(Authentication authentication,
                                                 @RequestBody ReviewRequestDto requestDto) {
         Member member = (Member) authentication.getPrincipal();
 
         reviewService.saveReview(member, requestDto);
 
         return ResponseEntity.ok("작성 완료");
+    }
+
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<String> deleteReviews(@PathVariable Long reviewId) {
+
+        reviewService.deleteReview(reviewId);
+
+        return ResponseEntity.ok("삭제 완료");
     }
 }
