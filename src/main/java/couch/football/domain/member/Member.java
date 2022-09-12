@@ -1,5 +1,6 @@
 package couch.football.domain.member;
 
+import couch.football.domain.match.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,12 +9,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import static lombok.AccessLevel.PROTECTED;
 
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 @Table(name = "members")
 public class Member implements UserDetails, Persistable<String> {
 
@@ -30,6 +35,9 @@ public class Member implements UserDetails, Persistable<String> {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews = new ArrayList<>();
 
     @Builder
     public Member(String uid, String username, String email, String phone, String gender, Role role) {
