@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .antMatchers("/users") //로그인은 로그인이 필요 없다
                 .antMatchers("/favicon.ico")
                 .antMatchers(HttpMethod.GET, "/matches/**")
-                .antMatchers(HttpMethod.GET,"/stadiums/**");
+                .antMatchers(HttpMethod.GET,"/stadiums/**")
+                .antMatchers(HttpMethod.GET,"/files/**");
     }
 }
