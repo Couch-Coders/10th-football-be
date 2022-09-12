@@ -7,12 +7,14 @@ import couch.football.exception.CustomException;
 import couch.football.exception.ErrorCode;
 import couch.football.repository.match.MatchRepository;
 import couch.football.repository.member.MemberRepository;
+import couch.football.repository.match.ReviewRepository;
 import couch.football.repository.stadium.StadiumRepository;
 import couch.football.request.match.MatchCreateRequest;
 import couch.football.request.match.MatchUpdateRequest;
 import couch.football.response.match.MatchDetailResponse;
 import couch.football.response.match.MatchResponse;
 import couch.football.response.members.MemberResponseDto;
+import couch.football.response.match.ReviewResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +31,10 @@ import java.util.stream.Collectors;
 @Transactional(readOnly=true)
 public class MatchService {
 
-    private final MatchRepository matchRepository;
     private final StadiumRepository stadiumRepository;
+    private final MatchRepository matchRepository;
     private final MemberRepository memberRepository;
+    private final ReviewRepository reviewRepository;
 
     private final ApplicationService applicationService;
 
@@ -80,9 +83,13 @@ public class MatchService {
             matchApplicants.add(new MemberResponseDto(member));
         }
 
+        List<ReviewResponseDto> matchReviews = reviewRepository.findByMatchId(matchId).stream()
+                .map(ReviewResponseDto::new).collect(Collectors.toList());
+
         return MatchDetailResponse.builder()
                 .match(match)
                 .matchApplicants(matchApplicants)
+                .matchReviews(matchReviews)
                 .build();
     }
 

@@ -3,8 +3,10 @@ package couch.football.controller.member;
 import couch.football.domain.member.Member;
 import couch.football.request.members.MemberInfoRequestDto;
 import couch.football.response.match.ApplicationListResponse;
+import couch.football.response.match.ReviewResponseDto;
 import couch.football.response.members.MemberResponseDto;
 import couch.football.service.match.ApplicationService;
+import couch.football.service.match.ReviewService;
 import couch.football.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,12 +23,20 @@ public class MemberController {
 
     private final MemberService memberService;
     private final ApplicationService applicationService;
+    private final ReviewService reviewService;
 
     @GetMapping("/users/me/applications")
     public Page<ApplicationListResponse> getApplicationList(Pageable pageable, Authentication authentication) {
         Member member = (Member) authentication.getPrincipal();
 
         return applicationService.getApplications(pageable, member);
+    }
+
+    @GetMapping("/users/me/reviews/{matchId}")
+    public ReviewResponseDto getReview(@PathVariable Long matchId, Authentication authentication) {
+        Member member = (Member) authentication.getPrincipal();
+
+        return reviewService.get(member, matchId);
     }
 
     //로그인

@@ -14,10 +14,12 @@ public class MatchDetailResponse {
 
     private MatchResponse match;
     private List<MemberResponseDto> matchApplicants;
+    private List<ReviewResponseDto> matchReviews;
 
     @Builder
-    public MatchDetailResponse(Match match, List<MemberResponseDto> matchApplicants) {
+    public MatchDetailResponse(Match match, List<MemberResponseDto> matchApplicants, List<ReviewResponseDto> matchReviews) {
         this.match = new MatchResponse(match);
         this.matchApplicants = matchApplicants;
+        this.matchReviews = matchReviews;
     }
 }
