@@ -1,7 +1,9 @@
 package couch.football.controller.member;
 
 import couch.football.domain.member.Member;
+import couch.football.repository.member.ReviewRepository;
 import couch.football.request.members.ReviewRequestDto;
+import couch.football.response.members.ReviewResponseDto;
 import couch.football.service.member.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +33,12 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
 
         return ResponseEntity.ok("삭제 완료");
+    }
+
+    @GetMapping("/{reviewId}")
+    public ReviewResponseDto findOneReview(@PathVariable Long reviewId) {
+
+
+        return reviewService.findOneReview(reviewId);
     }
 }
