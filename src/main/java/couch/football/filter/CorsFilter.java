@@ -28,7 +28,8 @@ public class CorsFilter implements Filter {
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setHeader("Access-Control-Allow-Methods","*");
         res.setHeader("Access-Control-Max-Age", "3600");//Preflight 요청의 결과를 저장하고 있을 시간
-        res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//        res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+        res.setHeader("Access-Control-Allow-Headers", "*");
 
 
         if("OPTIONS".equalsIgnoreCase(req.getMethod())) {
