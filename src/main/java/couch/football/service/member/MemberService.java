@@ -45,8 +45,6 @@ public class MemberService implements UserDetailsService {
 
         duplicateCheck(member);
 
-        log.info("saveTest");
-
         return new MemberResponseDto(memberRepository.save(member));
     }
 
@@ -78,7 +76,6 @@ public class MemberService implements UserDetailsService {
     //즉 어딘가에서는 유저 정보를 security에 담아야 한다. -> filter
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
-        log.info("LoadTest");
         return (UserDetails) memberRepository.findByUid(uid).orElseThrow(() -> {
             throw new UsernameNotFoundException("해당 회원이 존재하지 않습니다.");
         });
