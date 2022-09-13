@@ -1,6 +1,7 @@
 package couch.football.domain.stadium;
 
 import couch.football.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,10 +19,18 @@ public class Like {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid", nullable = false)
+    @JoinColumn(name = "uid")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stadium_id", nullable = false)
+    @JoinColumn(name = "stadium_id")
     private Stadium stadium;
+
+    @Builder
+    public Like(Long id, Member member, Stadium stadium) {
+        this.id = id;
+        this.member = member;
+        this.stadium = stadium;
+    }
+
 }

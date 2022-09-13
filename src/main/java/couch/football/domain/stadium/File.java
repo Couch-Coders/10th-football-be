@@ -1,9 +1,9 @@
 package couch.football.domain.stadium;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -22,4 +22,11 @@ public class File {
     private Stadium stadium;
 
     private String imageUrl;
+
+    @Builder
+    public File(Long id, String imageUrl, Stadium stadium) {
+        this.id = id;
+        this.stadium = stadium;
+        this.imageUrl = imageUrl;
+    }
 }

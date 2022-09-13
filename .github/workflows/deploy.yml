@@ -12,10 +12,10 @@ jobs:
       - name: checkout backend
         uses: actions/checkout@v2
 
-      - name: java JDK 17 install
+      - name: java JDK 11 install
         uses: actions/setup-java@v2
         with:
-          java-version: 17
+          java-version: 11
           distribution: temurin
 
       - name: deploy to heroku
@@ -24,3 +24,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
+          stack: "Heroku-22"

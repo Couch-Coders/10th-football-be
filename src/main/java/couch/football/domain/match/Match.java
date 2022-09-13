@@ -1,26 +1,32 @@
 package couch.football.domain.match;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import couch.football.domain.base.BaseTimeEntity;
 import couch.football.domain.stadium.Stadium;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import couch.football.request.match.MatchCreateRequest;
+import couch.football.request.match.MatchUpdateRequest;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @ToString
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "matches")
-public class Match {
+public class Match extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -31,12 +37,9 @@ public class Match {
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
 
-    @OneToMany(mappedBy = "match")
-    private List<Review> reviews = new ArrayList<>();
+    private Integer matchNum;
 
-    private int matchNum;
-
-    private int applicantNum;
+    private Integer applicantNum;
 
     @Enumerated(STRING)
     private MatchStatus status;
@@ -47,19 +50,55 @@ public class Match {
     @Lob
     private String content;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startAt;
 
-    private LocalDateTime createAt;
+    private Integer matchDay;
+
+    @OneToMany(mappedBy = "match", cascade = REMOVE, orphanRemoval = true)
+    private List<Application> applications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "match", cascade = REMOVE, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     @Builder
-    public Match(Stadium stadium, int matchNum, int applicantNum, MatchStatus status, MatchGender gender, String content, LocalDateTime startAt) {
+    public Match(Long id, Stadium stadium, MatchCreateRequest request) {
+        this.id = id;
         this.stadium = stadium;
-        this.matchNum = matchNum;
-        this.applicantNum = applicantNum;
-        this.status = status;
-        this.gender = gender;
-        this.content = content;
-        this.startAt = startAt;
-        this.createAt = LocalDateTime.now();
+        this.matchNum = request.getMatchNum();
+        this.applicantNum = 0;
+        this.status = MatchStatus.OPEN;
+        this.gender = MatchGender.valueOf(request.getMatchGender().toUpperCase());
+        this.content = request.getContent();
+        this.startAt = request.getStartAt();
+        this.matchDay = startAt.getDayOfYear();
+    }
+
+    public void update(Stadium stadium, MatchUpdateRequest request) {
+        this.stadium = stadium;
+        this.matchNum = request.getMatchNum();
+        this.gender = MatchGender.valueOf(request.getMatchGender().toUpperCase());
+        this.content = request.getContent();
+        this.startAt = request.getStartAt();
+    }
+
+    public void increaseApplicantNum() {
+        this.applicantNum++;
+    }
+
+    public void decreaseApplicantNum() {
+        this.applicantNum--;
+    }
+
+    public int getRest() {
+        return this.matchNum - this.applicantNum;
+    }
+
+    public void updateStatus() {
+        if (getRest() <= 0) {
+            this.status = MatchStatus.CLOSE;
+        } else if (getRest() > 0) {
+            this.status = MatchStatus.OPEN;
+        }
     }
 }
