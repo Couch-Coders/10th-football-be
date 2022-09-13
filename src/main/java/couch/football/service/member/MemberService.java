@@ -12,6 +12,7 @@ import couch.football.request.members.MemberInfoRequestDto;
 import couch.football.response.members.MemberResponseDto;
 import couch.football.util.TokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
@@ -49,7 +51,7 @@ public class MemberService implements UserDetailsService {
     private void duplicateCheck(Member member) {
         boolean existsMember = memberRepository.existsByUid(member.getUid());
         if (existsMember) {
-            throw new CustomException(ErrorCode.EXIST_MEMBER);
+            throw new IllegalArgumentException("이미 가입된 회원입니다.");
         }
     }
 
@@ -75,7 +77,7 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
         return (UserDetails) memberRepository.findByUid(uid).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
+            throw new UsernameNotFoundException("해당 회원이 존재하지 않습니다.");
         });
     }
 
