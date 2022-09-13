@@ -18,6 +18,7 @@ public enum ErrorCode {
     NOT_FOUND_MATCH(HttpStatus.NOT_FOUND, "해당 경기를 찾을 수 없습니다."),
 
     //stadium
+    EXIST_MATCH(HttpStatus.BAD_REQUEST, "해당 경기장을 사용중인 경기가 존재합니다."),
     NOT_FOUND_STADIUM(HttpStatus.NOT_FOUND, "해당 경기장을 찾을 수 없습니다."),
 
     //like
