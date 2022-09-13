@@ -1,7 +1,6 @@
 package couch.football.domain.match;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import couch.football.domain.base.BaseTimeEntity;
 import couch.football.domain.stadium.Stadium;
 import couch.football.request.match.MatchCreateRequest;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -55,10 +54,10 @@ public class Match extends BaseTimeEntity {
 
     private Integer matchDay;
 
-    @OneToMany(mappedBy = "match", cascade = REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "match", cascade = ALL, orphanRemoval = true)
     private List<Application> applications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "match", cascade = REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "match", cascade = ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
     @Builder
