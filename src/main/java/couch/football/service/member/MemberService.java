@@ -51,7 +51,7 @@ public class MemberService implements UserDetailsService {
     private void duplicateCheck(Member member) {
         boolean existsMember = memberRepository.existsByUid(member.getUid());
         if (existsMember) {
-            throw new CustomException(ErrorCode.EXIST_MEMBER);
+            throw new IllegalArgumentException("이미 가입된 회원입니다.");
         }
     }
 
