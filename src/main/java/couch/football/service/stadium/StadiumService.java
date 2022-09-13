@@ -1,7 +1,12 @@
 package couch.football.service.stadium;
 
+import couch.football.domain.match.Match;
+import couch.football.domain.match.MatchStatus;
 import couch.football.domain.stadium.File;
 import couch.football.domain.stadium.Stadium;
+import couch.football.exception.CustomException;
+import couch.football.exception.ErrorCode;
+import couch.football.repository.match.MatchRepository;
 import couch.football.repository.stadium.FileRepository;
 import couch.football.repository.stadium.StadiumRepository;
 import couch.football.request.stadium.StadiumCreateRequest;
@@ -18,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static javax.persistence.CascadeType.ALL;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +32,7 @@ import java.util.stream.Collectors;
 public class StadiumService {
 
     private final StadiumRepository stadiumRepository;
+    private final MatchRepository matchRepository;
     private final FileRepository fileRepository;
 
     public List<StadiumSearchResponse> searchAddress(String address) {
@@ -115,7 +123,20 @@ public class StadiumService {
 
         Stadium findStadium = findStadium(stadiumId);
 
-        stadiumRepository.delete(findStadium);
+        List<Match> matches = matchRepository.findByStadiumId(stadiumId);
+        boolean flag = false;
+        for (Match match : matches) {
+            if (match.getStatus().equals(MatchStatus.OPEN)) {
+                flag = true;
+            }
+        }
+
+        if (flag) {
+            throw new CustomException(ErrorCode.EXIST_MATCH);
+        } else {
+            stadiumRepository.delete(findStadium);
+        }
+
     }
 
     private Stadium findStadium(Long stadiumId) {
