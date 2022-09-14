@@ -40,7 +40,7 @@ public class MemberService implements UserDetailsService {
                 .email(decodedToken.getEmail())
                 .phone(request.getPhone())
                 .gender(request.getGender())
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         duplicateCheck(member);
@@ -107,7 +107,7 @@ public class MemberService implements UserDetailsService {
                 .email("test@email.com")
                 .phone(request.getPhone())
                 .gender(request.getGender())
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         return new MemberResponseDto(memberRepository.save(member));

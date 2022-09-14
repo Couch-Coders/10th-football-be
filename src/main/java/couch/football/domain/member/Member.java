@@ -53,7 +53,14 @@ public class Member implements UserDetails, Persistable<String> {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> collect = new ArrayList<>();
+        collect.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return role.toString();
+            }
+        });
+        return collect;
     }
 
     @Override
