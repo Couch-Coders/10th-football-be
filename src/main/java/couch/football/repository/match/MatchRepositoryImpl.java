@@ -48,6 +48,14 @@ public class MatchRepositoryImpl implements MatchRepositoryCustom{
         return Optional.ofNullable(match);
     }
 
+    @Override
+    public List<Match> findByStadiumIdWithStatus(Long stadiumId, MatchStatus status) {
+        return queryFactory.selectFrom(match)
+                .join(match.stadium, stadium).fetchJoin()
+                .where(match.stadium.id.eq(stadiumId), eqStatus(status))
+                .fetch();
+    }
+
     private BooleanExpression eqStadiumName(String stadiumName) {
         if (stadiumName == null || stadiumName.isEmpty()) {
             return null;
@@ -81,6 +89,13 @@ public class MatchRepositoryImpl implements MatchRepositoryCustom{
             return null;
         }
         return match.matchNum.eq(personnel);
+    }
+
+    private BooleanExpression eqStatus(MatchStatus status) {
+        if (status == null) {
+            return null;
+        }
+        return match.status.eq(status);
     }
 
 

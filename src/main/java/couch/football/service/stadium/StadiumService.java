@@ -123,19 +123,13 @@ public class StadiumService {
 
         Stadium findStadium = findStadium(stadiumId);
 
-        List<Match> matches = matchRepository.findByStadiumId(stadiumId);
-        boolean flag = false;
-        for (Match match : matches) {
-            if (match.getStatus().equals(MatchStatus.OPEN)) {
-                flag = true;
-            }
+        List<Match> matches = matchRepository.findByStadiumIdWithStatus(stadiumId, MatchStatus.OPEN);
+
+        if (!matches.isEmpty()) {
+            throw new CustomException(ErrorCode.EXIST_MATCH);
         }
 
-        if (flag) {
-            throw new CustomException(ErrorCode.EXIST_MATCH);
-        } else {
-            stadiumRepository.delete(findStadium);
-        }
+        stadiumRepository.delete(findStadium);
 
     }
 
