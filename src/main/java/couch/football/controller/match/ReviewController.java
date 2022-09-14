@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("reviews")
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class ReviewController {
 
     @PostMapping("")
     public ResponseEntity<String> createReviews(Authentication authentication,
-                                                @RequestBody ReviewRequestDto requestDto) {
+                                                @RequestBody @Valid ReviewRequestDto requestDto) {
         Member member = (Member) authentication.getPrincipal();
 
         reviewService.create(member, requestDto);
