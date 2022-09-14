@@ -10,11 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @EnableWebSecurity
 @Configuration
@@ -30,6 +25,15 @@ public class SecurityConfig {
               .httpBasic().disable()//rest api만 고려
               .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
               //시큐리티가 세션을 생성하지 않음(JWT를 사용)
+              .and()
+              .authorizeRequests()
+              .antMatchers(HttpMethod.POST, "/matches","/stadiums")
+              .hasRole("ADMIN")
+              .antMatchers(HttpMethod.PATCH, "/matches/{matchId}", "/stadiums/{stadiumId}")
+              .hasRole("ADMIN")
+              .antMatchers(HttpMethod.DELETE, "/matches/{matchId}", "/stadiums/{stadiumId}")
+              .hasRole("ADMIN")
+              .anyRequest().permitAll()
               .and()
               .csrf().disable()
               .addFilterBefore(authFilterContainer.getAuthFilter(),
