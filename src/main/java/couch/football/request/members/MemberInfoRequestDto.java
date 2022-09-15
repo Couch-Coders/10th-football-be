@@ -13,8 +13,7 @@ public class MemberInfoRequestDto {
     @NotBlank(message = "성별을 선택해 주세요")
     private String gender;
 
-    @NotNull
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$",message = "전화번호를 알맞게 입력해 주세요")
+    @NotNull(message = "전화번호를 입력해 주세요")
     private String phone;
 
 }
