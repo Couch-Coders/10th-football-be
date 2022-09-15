@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 //@CrossOrigin("https://football-3b39f.web.app/")
@@ -53,7 +55,7 @@ public class MemberController {
     //회원가입(없는 회원으로 @GetMapping("/users/me")에서 401이 return 됨)
     @PostMapping("/users")
     public ResponseEntity<MemberResponseDto> joinMember(@RequestHeader("Authorization") String header,
-                                                        @RequestBody MemberInfoRequestDto memberInfoRequestDto) {
+                                                        @RequestBody @Valid MemberInfoRequestDto memberInfoRequestDto) {
 
         MemberResponseDto responseDto = memberService.saveMember(header, memberInfoRequestDto);
 
