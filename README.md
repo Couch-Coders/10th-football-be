@@ -1,10 +1,10 @@
-# 풋살 매칭 플랫폼 - Football(미정)
+# 풋살 매칭 플랫폼 - Footwork
 
 ### "풋살이 하고 싶을 때, 하고 싶은 곳에서, 하고 싶은 사람들과"
 
 <br>
 
-## ⚽️ 배포 주소 [Football](https://football-3b39f.web.app/)
+## ⚽️ 배포 주소 [Footwork](https://football-3b39f.web.app/)
 
 ##  ✏️ 프로젝트 기획 의도
 ### 풋살을 좋아하는 사람들이 팀 없이도 경기에 참여할 수 있도록 도와주기 위한 프로젝트
