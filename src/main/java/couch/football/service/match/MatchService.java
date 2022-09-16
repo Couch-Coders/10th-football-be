@@ -82,12 +82,6 @@ public class MatchService {
         Page<Match> matches = matchRepository.findAllBySearchOption(pageable, matchDay, gender, status, personnel, stadiumName);
         for (Match match : matches) {
             match.updateStatus();
-
-            if (match.getStartAt().getDayOfYear() <= LocalDateTime.now().getDayOfYear()
-                    && match.getStartAt().getHour() <= LocalDateTime.now().getHour()
-                    && match.getStartAt().getMinute() < LocalDateTime.now().getMinute()) {
-                match.increaseApplicantNum();
-            }
         }
 
         return matches.map(MatchResponse::new);
