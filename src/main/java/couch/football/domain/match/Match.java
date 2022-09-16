@@ -6,6 +6,7 @@ import couch.football.domain.stadium.Stadium;
 import couch.football.request.match.MatchCreateRequest;
 import couch.football.request.match.MatchUpdateRequest;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "matches")
+@Slf4j
 public class Match extends BaseTimeEntity {
 
     @Id
@@ -94,10 +96,10 @@ public class Match extends BaseTimeEntity {
     }
 
     public void updateStatus() {
-        if (getRest() <= 0) {
-            this.status = MatchStatus.CLOSE;
-        } else if (getRest() > 0) {
+        if (this.startAt.isAfter(LocalDateTime.now()) && getRest() > 0) {
             this.status = MatchStatus.OPEN;
+        } else {
+            this.status = MatchStatus.CLOSE;
         }
     }
 }
