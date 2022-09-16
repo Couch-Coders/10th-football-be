@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import couch.football.domain.match.*;
 import couch.football.domain.member.Member;
-import couch.football.domain.stadium.Like;
 import couch.football.domain.stadium.Stadium;
 import couch.football.exception.CustomException;
 import couch.football.exception.ErrorCode;
@@ -77,9 +76,14 @@ public class MatchService {
         matchRepository.delete(match);
     }
 
+    @Transactional
     public Page<MatchResponse> getList(Pageable pageable, LocalDate matchDay, String gender, String status, Integer personnel, String stadiumName) {
-        return matchRepository.findAllBySearchOption(pageable, matchDay, gender, status, personnel, stadiumName)
-                .map(MatchResponse::new);
+        Page<Match> matches = matchRepository.findAllBySearchOption(pageable, matchDay, gender, status, personnel, stadiumName);
+        for (Match match : matches) {
+            match.updateStatus();
+        }
+
+        return matches.map(MatchResponse::new);
     }
 
     public MatchDetailResponse get(Long matchId, String header) {
