@@ -94,15 +94,22 @@ public class Match extends BaseTimeEntity {
     }
 
     public void updateStatus() {
-        if (getRest() <= 0 || startAt.getDayOfYear() < LocalDateTime.now().getDayOfYear()) {
-            this.status = MatchStatus.CLOSE;
-        } else if (startAt.getDayOfYear() <= LocalDateTime.now().getDayOfYear()
-                && startAt.getHour() <= LocalDateTime.now().getHour()
-                && startAt.getMinute() < LocalDateTime.now().getMinute()) {
-            this.status = MatchStatus.CLOSE;
+        boolean timeStatus;
+
+        if (this.startAt.getDayOfYear() < LocalDateTime.now().getDayOfYear()) {
+            timeStatus = true;
+        } else if (this.startAt.getDayOfYear() <= LocalDateTime.now().getDayOfYear()
+                && this.startAt.getHour() <= LocalDateTime.now().getHour()
+                && this.startAt.getMinute() < LocalDateTime.now().getMinute()) {
+            timeStatus = true;
+        } else {
+            timeStatus = false;
         }
-        else {
+
+        if (getRest() > 0 && !timeStatus) {
             this.status = MatchStatus.OPEN;
+        } else {
+            this.status = MatchStatus.CLOSE;
         }
     }
 }
